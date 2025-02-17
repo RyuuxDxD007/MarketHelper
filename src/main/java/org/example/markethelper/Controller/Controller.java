@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.WindowEvent;
 import org.example.markethelper.Model.*;
+import org.example.markethelper.Model.BL.Item;
 import org.example.markethelper.View.*;
 
 import java.beans.PropertyChangeListener;
@@ -30,10 +31,12 @@ public class Controller {
     public void start(){
         this.view.launchApp();
     }
+
     public void stop(){
         this.model.close();
         this.view.stopApp();
     }
+
     public EventHandler<ActionEvent> generateEventHandlerAction(String action, Supplier<String[]> params){
         Consumer<String[]> function = this.generateConsumer(action);
         return new EventHandler<ActionEvent>() {
@@ -66,9 +69,28 @@ public class Controller {
     private Consumer<String[]> generateConsumer(String action){
         Consumer<String[]> t;
         switch (action) {
-
+            case "verify":
+                t = (x) -> {
+                    if(this.verifyUser(x[0], x[1])){
+                        changeView("mainPage");
+                    }
+                    else {
+                        ((Identification) this.view).showErrorMessage("Error: Id and/or Password is wrong!");
+                    }
+                };
+                break;
+            case "show-items":
+                t = x -> showAllItems();
+                break;
             case "create-user":
-                t = (x) -> this.createUser(x[0],x[1]);
+                t = (x) -> {
+                    if(this.createUser(x[0], x[1])){
+                        changeView("mainPage");
+                    }
+                    else {
+                        ((NewUser) this.view).showErrorMessage("Error: Id already taken.");
+                    }
+                };
                 break;
             case "new-user":
                 t = (x) -> changeView(action);
@@ -82,8 +104,8 @@ public class Controller {
         return t;
     }
 
-    private void createUser(String id, String pass) {
-    this.model.createUser(id,pass);
+    private boolean createUser(String id, String pass) {
+    return this.model.createUser(id,pass);
     }
 
     public void changeView(String view) {
@@ -100,8 +122,11 @@ public class Controller {
         this.view = view;
     }
 
-    public ArrayList<String> showAllItems() {
+    public void showAllItems() {
         this.model.getAllItems();
+    }
+    public boolean verifyUser(String id, String pass) {
+        return this.model.verifyUser(id,pass);
     }
 
     //need to add model actions

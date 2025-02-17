@@ -1,6 +1,8 @@
 package org.example.markethelper.View;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.*;
@@ -16,12 +18,13 @@ public class Identification implements IView{
     private IView view;
     private static Scene scene;
     private static Stage stage;
-    private Pane actualParent;
+    private VBox actualParent;
     private Controller controller;
 
     public Identification(IView view) {
         this.view = view;
         this.controller = view.getController();
+        this.stage = view.getStage();
     }
     @Override
     public void setController(Controller controller) {
@@ -35,6 +38,7 @@ public class Identification implements IView{
     public Stage getStage(){
         return stage;
     }
+
     //Shouldn't be usable
     @Override
     public void launchApp() {
@@ -90,7 +94,8 @@ public class Identification implements IView{
         });
         submitPassButton.setOnAction(e -> {
             Supplier<String[]> supplier = () -> new String[]{idField.getText(), passField.getText()};
-            controller.generateEventHandlerAction("verify",supplier);
+            EventHandler<ActionEvent> handler = controller.generateEventHandlerAction("verify", () -> new String[]{idField.getText(), passField.getText()});
+            handler.handle(e);
             passBox.setVisible(false);
             idBox.setVisible(true);
         });
@@ -99,6 +104,13 @@ public class Identification implements IView{
 
         scene = new Scene(actualParent,640,480);
         stage.setScene(scene);
+    }
+    public void showErrorMessage(String error) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(error);
+        alert.showAndWait();
     }
 
 

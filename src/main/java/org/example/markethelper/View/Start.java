@@ -2,6 +2,7 @@ package org.example.markethelper.View;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -10,15 +11,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.markethelper.Controller.Controller;
 
-import java.beans.PropertyChangeEvent;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.function.Supplier;
 
 public class Start extends Application implements  IView {
     private static Scene scene;
     private static Stage stage;
-    private Pane actualParent;
+    private VBox actualParent;
     private Controller controller;
 
     public void setController(Controller controller) {
@@ -51,6 +50,7 @@ public class Start extends Application implements  IView {
         existingUser.setOnAction(controller.generateEventHandlerAction("identification",supplier));
         buttonUser.getChildren().addAll(newUser, existingUser);
         actualParent.getChildren().add(buttonUser);
+        actualParent.setAlignment(Pos.CENTER);
 
         scene = new Scene(actualParent,640,480);
         stage.setScene(scene);
@@ -96,4 +96,5 @@ public class Start extends Application implements  IView {
     public Stage getStage(){
         return stage;
     }
+
 }

@@ -5,7 +5,7 @@ import org.example.markethelper.Model.BL.User;
 import java.util.List;
 
 public interface IUserDAO {
-    public void addUser(String id, String pass);
+    public boolean addUser(String id, String pass);
     public User getUser(String id);
     public List<User> getAllUsers();
     public void deleteUser(String id);

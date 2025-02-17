@@ -19,15 +19,15 @@ public class UserDAO implements IUserDAO {
             this.con = con;
             Statement statement = con.createStatement();
             try {
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS User (id VARCHAR(50) PRIMARY KEY, hash VARCHAR(128))");
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS AppUser (id VARCHAR(50) PRIMARY KEY, hash VARCHAR(128))");
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
             statement.close();
-            this.insertUser = this.con.prepareStatement("INSERT INTO User (id, hash) VALUES (?, ?)");
-            this.deleteUser = this.con.prepareStatement("DELETE FROM User WHERE id=?");
-            this.getAllUsers = this.con.prepareStatement("SELECT id,nom FROM User");
-            this.getUser = this.con.prepareStatement("SELECT * FROM users WHERE id = ?");
+            this.insertUser = this.con.prepareStatement("INSERT INTO AppUser (id, hash) VALUES (?, ?)");
+            this.deleteUser = this.con.prepareStatement("DELETE FROM AppUser WHERE id=?");
+            this.getAllUsers = this.con.prepareStatement("SELECT id,nom FROM AppUser");
+            this.getUser = this.con.prepareStatement("SELECT * FROM AppUser WHERE id = ?");
         }
         catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -35,16 +35,18 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public void addUser(String id, String pass) {
+    public boolean addUser(String id, String pass) {
         User user = new User(id, null);
         user.computeHash(pass);
         try{
             this.insertUser.setString(1,user.getId());
             this.insertUser.setString(2,user.getHash());
             this.insertUser.executeUpdate();
+            return true;
         }
         catch (SQLException e) {
             System.out.println(e.getMessage());
+            return false;
         }
     }
 
@@ -53,13 +55,14 @@ public class UserDAO implements IUserDAO {
         try {
             this.getUser.setString(1,id);
             ResultSet set = this.getUser.executeQuery();
-            return new User(set.getString("id"), set.getString("hash"));
-
+            if (set.next()) {
+                return new User(set.getString("id"), set.getString("hash"));
+            }
         }
         catch (SQLException e) {
             System.out.println(e.getMessage());
-            return null;
         }
+        return null;
     }
 
     @Override

@@ -25,7 +25,7 @@ public class DBConnection {
                 requete.executeUpdate("CREATE DATABASE MARKETHELPER");
             } catch (SQLException e) {
 
-                System.out.println("Base de données UE1392 déjà existante.\n" + e.getMessage());
+                System.out.println("Base de données MarketHelper déjà existante.\n" + e.getMessage());
             }
         }
         return con;

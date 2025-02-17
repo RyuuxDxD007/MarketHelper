@@ -1,6 +1,7 @@
 package org.example.markethelper.View;
 
 import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -9,13 +10,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.markethelper.Controller.Controller;
 
+import java.beans.PropertyChangeEvent;
 import java.util.function.Supplier;
 
 public class NewUser implements IView{
     private IView view;
     private static Scene scene;
     private static Stage stage;
-    private Pane actualParent;
+    private VBox actualParent;
     private Controller controller;
 
     public NewUser(IView view) {
@@ -35,7 +37,6 @@ public class NewUser implements IView{
     public Stage getStage(){
         return stage;
     }
-
     //Shouldn't be usable
     @Override
     public void launchApp() {
@@ -51,6 +52,7 @@ public class NewUser implements IView{
     public void showPrincipalWindow(){
         //create container
         actualParent = new VBox();
+        actualParent.setAlignment(Pos.CENTER);
 
         //title
         HBox titleBox = new HBox(40);
@@ -93,12 +95,20 @@ public class NewUser implements IView{
         Supplier<String[]> supplier = () -> new String[] {idField.getText(), passField.getText()};
         HBox buttonEnter = new HBox(40);
         Button enter = new Button("Enter");
-        enter.setOnAction(controller.generateEventHandlerAction("new-user",supplier));
+        enter.setOnAction(controller.generateEventHandlerAction("create-user",supplier));
         buttonEnter.getChildren().add(enter);
 
         actualParent.getChildren().addAll(titleBox, idBox, passBox, buttonEnter);
 
         scene = new Scene(actualParent,640,480);
         stage.setScene(scene);
+    }
+
+    public void showErrorMessage(String error) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(error);
+        alert.showAndWait();
     }
 }

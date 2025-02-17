@@ -6,5 +6,9 @@ public interface IModel {
     public void addPropertyChangeListener(PropertyChangeListener pcl);
     public void removePropertyChangeListener(PropertyChangeListener pcl);
     public void close();
-    public void createUser(String id, String pass);
+
+    void getAllItems();
+
+    public boolean createUser(String id, String pass);
+    public boolean verifyUser(String id, String pass);
 }
