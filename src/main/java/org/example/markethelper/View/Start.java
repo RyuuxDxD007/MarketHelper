@@ -41,18 +41,19 @@ public class Start extends Application implements  IView {
 
     public void showPrincipalWindow(){
         actualParent = new VBox();
+        actualParent.setAlignment(Pos.CENTER);
         Supplier<String[]> supplier = () -> new String[]{""};
 
         HBox buttonUser = new HBox();
+        buttonUser.setAlignment(Pos.CENTER);
         Button newUser = new Button("New User");
         Button existingUser = new Button("Existing User");
-        newUser.setOnAction(controller.generateEventHandlerAction("new-user",supplier));
-        existingUser.setOnAction(controller.generateEventHandlerAction("identification",supplier));
+        newUser.setOnAction(controller.generateEventHandlerAction("view-newUser",supplier));
+        existingUser.setOnAction(controller.generateEventHandlerAction("view-identification",supplier));
         buttonUser.getChildren().addAll(newUser, existingUser);
         actualParent.getChildren().add(buttonUser);
-        actualParent.setAlignment(Pos.CENTER);
 
-        scene = new Scene(actualParent,640,480);
+        scene = new Scene(actualParent,1300,600);
         stage.setScene(scene);
     }
 

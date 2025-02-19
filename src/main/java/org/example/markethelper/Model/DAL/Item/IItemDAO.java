@@ -7,11 +7,11 @@ import java.util.ArrayList;
 
 public interface IItemDAO {
 
-    public ArrayList<Item> getItems();
-    public Item getItem(int id);
-    public boolean addItem(Item item);
-    public boolean updateItem(Item item);
-    public boolean deleteItem(int id);
-    public boolean close();
+    ArrayList<Item> getItems();
+    Item getItem(int id);
+    boolean addItem(Item item);
+    boolean updateItem(Item item);
+    boolean deleteItem(int id);
+    boolean close();
 
 }

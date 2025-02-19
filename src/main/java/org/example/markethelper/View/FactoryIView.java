@@ -7,12 +7,18 @@ public class FactoryIView {
         switch (view) {
             case "start":
                 return new Start();
-            case "identification":
+            case "view-identification":
                 return (IView) new Identification(app);
-            case "mainPage":
+            case "view-mainPage":
                 return (IView) new MainPage(app);
-            case "new-user":
+            case "view-newUser":
                 return (IView) new NewUser(app);
+            case "view-relics":
+                return (IView) new VRelics(app);
+            case "view-primeSets":
+                return (IView) new VPrimeSets(app);
+            case "view-newItem":
+                return (IView) new VNewItem(app);
             default :
                 throw new InvalidParameterException("unknown view : " + view);
         }

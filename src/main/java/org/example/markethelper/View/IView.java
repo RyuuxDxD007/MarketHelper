@@ -6,10 +6,10 @@ import org.example.markethelper.Controller.Controller;
 import java.beans.PropertyChangeEvent;
 
 public interface IView {
-    public void setController(Controller controller);
-    public Controller getController();
-    public Stage getStage();
-    public void launchApp();
-    public void stopApp();
-    public void showPrincipalWindow();
+    void setController(Controller controller);
+    Controller getController();
+    Stage getStage();
+    void launchApp();
+    void stopApp();
+    void showPrincipalWindow();
 }

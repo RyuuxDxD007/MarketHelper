@@ -56,17 +56,20 @@ public class NewUser implements IView{
 
         //title
         HBox titleBox = new HBox(40);
+        titleBox.setAlignment(Pos.CENTER);
         Label title = new Label("Creation of user!");
         titleBox.getChildren().add(title);
 
         //first element id
         HBox idBox = new HBox(20);
+        idBox.setAlignment(Pos.CENTER);
         Label idLabel = new Label("ID:");
         TextField idField = new TextField();
         idBox.getChildren().addAll(idLabel, idField);
 
         //second element password
         HBox passBox = new HBox(20);
+        passBox.setAlignment(Pos.CENTER);
         Label passLabel = new Label("Password:");
         PasswordField passField = new PasswordField();
         TextField passShow = new TextField();
@@ -94,13 +97,14 @@ public class NewUser implements IView{
         //the enter button
         Supplier<String[]> supplier = () -> new String[] {idField.getText(), passField.getText()};
         HBox buttonEnter = new HBox(40);
+        buttonEnter.setAlignment(Pos.CENTER);
         Button enter = new Button("Enter");
         enter.setOnAction(controller.generateEventHandlerAction("create-user",supplier));
         buttonEnter.getChildren().add(enter);
 
         actualParent.getChildren().addAll(titleBox, idBox, passBox, buttonEnter);
 
-        scene = new Scene(actualParent,640,480);
+        scene = new Scene(actualParent,1300,600);
         stage.setScene(scene);
     }
 

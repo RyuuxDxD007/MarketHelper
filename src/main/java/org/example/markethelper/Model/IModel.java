@@ -1,14 +1,20 @@
 package org.example.markethelper.Model;
 
+import org.example.markethelper.Model.BL.Item;
+
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 
 public interface IModel {
-    public void addPropertyChangeListener(PropertyChangeListener pcl);
-    public void removePropertyChangeListener(PropertyChangeListener pcl);
-    public void close();
-
-    void getAllItems();
-
-    public boolean createUser(String id, String pass);
-    public boolean verifyUser(String id, String pass);
+    void addPropertyChangeListener(PropertyChangeListener pcl);
+    void removePropertyChangeListener(PropertyChangeListener pcl);
+    void close();
+    //void getAllItems();
+    void getFiltered();
+    boolean createUser(String id, String pass);
+    boolean verifyUser(String id, String pass);
+    String getItemRarity(Item item);
+    String getItemReroll(Item item);
+    String getItemPolarity(Item item);
+    String getItemType(Item item);
 }

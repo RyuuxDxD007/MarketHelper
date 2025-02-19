@@ -3,6 +3,7 @@ package org.example.markethelper.View;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.*;
@@ -53,15 +54,18 @@ public class Identification implements IView{
     @Override
     public void showPrincipalWindow(){
         actualParent = new VBox();
+        actualParent.setAlignment(Pos.CENTER);
 
         HBox idBox = new HBox(20);
-        Label idLabel = new Label("Enter your ID:");
+        idBox.setAlignment(Pos.CENTER);
+        Label idLabel = new Label("      ID:");
         TextField idField = new TextField();
         Button submitIdButton = new Button("Confirm");
 
         idBox.getChildren().addAll(idLabel, idField, submitIdButton);
 
         HBox passBox = new HBox(20);
+        passBox.setAlignment(Pos.CENTER);
         Label passLabel = new Label("Password:");
         PasswordField passField = new PasswordField();
         TextField passShow = new TextField();
@@ -102,7 +106,7 @@ public class Identification implements IView{
         actualParent.getChildren().addAll(idBox, passBox);
 
 
-        scene = new Scene(actualParent,640,480);
+        scene = new Scene(actualParent,1300,600);
         stage.setScene(scene);
     }
     public void showErrorMessage(String error) {
