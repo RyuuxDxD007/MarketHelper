@@ -111,6 +111,36 @@ public class Controller {
                 };
                 break;
 
+            //Select buttons changing bool
+            case "select-min":
+                t = (x) -> checkPressed(action);
+                break;
+            case "select-max":
+                t = (x) -> checkPressed(action);
+                break;
+            case "select-averageMin":
+                t = (x) -> checkPressed(action);
+                break;
+            case "select-averageMax":
+                t = (x) -> checkPressed(action);
+                break;
+            case "select-item":
+                t = (x) -> checkPressed(action);
+                break;
+            case "select-mod":
+                t = (x) -> checkPressed(action);
+                break;
+            case "select-prime":
+                t = (x) -> checkPressed(action);
+                break;
+            case "select-riven":
+                t = (x) -> checkPressed(action);
+                break;
+            case "select-rarity":
+                t = (x) -> checkPressed(action);
+                break;
+
+
             //view changes
             case "view-newItem":
                 t = (x) -> changeView(action);
@@ -181,6 +211,34 @@ public class Controller {
     public String getItemType(Item item) {
         return this.model.getItemType(item);
     }
+
+    public void checkPressed(String check) {
+        this.model.boolChange(check);
+        this.model.getFiltered();
+    }
+
+    public void minFieldChange(String min) {
+        this.model.updateMinI(min);
+        this.model.getFiltered();
+    }
+    public void maxFieldChange(String max) {
+        this.model.updateMaxI(max);
+        this.model.getFiltered();
+    }
+    public void averageMinFieldChange(String averageMin) {
+        this.model.updateAverageMinI(averageMin);
+        this.model.getFiltered();
+    }
+    public void averageMaxFieldChange(String averageMax) {
+        this.model.updateAverageMaxI(averageMax);
+        this.model.getFiltered();
+    }
+
+    public void rarityFieldChange(String rarity) {
+        this.model.updateRarityI(rarity);
+        this.model.getFiltered();
+    }
+
 
     //need to add model actions
 }

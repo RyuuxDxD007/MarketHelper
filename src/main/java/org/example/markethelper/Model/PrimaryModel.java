@@ -1,7 +1,5 @@
 package org.example.markethelper.Model;
 
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
 import org.example.markethelper.Model.BL.*;
 import org.example.markethelper.Model.DAL.Item.IItemDAO;
 import org.example.markethelper.Model.DAL.Item.ItemDAO;
@@ -22,7 +20,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 
-public class PrimaryModel implements IModel{
+public class PrimaryModel implements IModel {
     private PropertyChangeSupport support;
     private DBConnection dbConn;
     private IRelicDAO relicDAO;
@@ -42,10 +40,16 @@ public class PrimaryModel implements IModel{
     boolean modB = false;
     boolean rivenB = false;
     boolean primeB = false;
-    boolean RarityB = false;
+    boolean rarityB = false;
+
+    private int minI;
+    private int maxI;
+    private int averageMinI;
+    private int averageMaxI;
+    private int rarityI;
 
 
-    public PrimaryModel(){
+    public PrimaryModel() {
         support = new PropertyChangeSupport(this);
         dbConn = new DBConnection();
         try {
@@ -56,11 +60,11 @@ public class PrimaryModel implements IModel{
             primePartDAO = new PrimePartDAO(dbConn.getCon());
             primeSetDAO = new PrimeSetDAO(dbConn.getCon());
             userDAO = new UserDAO(dbConn.getCon());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
+
     @Override
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         support.addPropertyChangeListener(pcl);
@@ -72,7 +76,7 @@ public class PrimaryModel implements IModel{
     }
 
 
-    public ArrayList<Item> getAllItems(){
+    public ArrayList<Item> getAllItems() {
         ArrayList<Item> all = new ArrayList<>();
         ArrayList<PrimePart> primeparts = primePartDAO.getPrimeParts();
         ArrayList<Item> items = itemDAO.getItems();
@@ -84,10 +88,12 @@ public class PrimaryModel implements IModel{
         all.addAll(primeparts);
         return all;
     }
-    public void getAllPrimeSets(){
+
+    public void getAllPrimeSets() {
         support.firePropertyChange("show-allSets", null, primeSetDAO.getAllPrimeSets());
     }
-    public void getAllRelics(){
+
+    public void getAllRelics() {
         support.firePropertyChange("show-allRelics", null, relicDAO.getAllRelics());
     }
 
@@ -138,62 +144,126 @@ public class PrimaryModel implements IModel{
             return "Item";
         }
     }
-    public ArrayList<Item> Filtring (){
+
+    public ArrayList<Item> Filtring() {
         ArrayList<Item> filtered = new ArrayList<>();
         filtered = getAllItems();
-        for (Item item : filtered) {
+        for (int i = filtered.size() - 1; i >= 0; i--){
             if (minB) {
-                if(item.getPrice()<=minI){
-                    filtered.remove(item);
+                if (filtered.get(i).getPrice() <= minI) {
+                    filtered.remove(i);
                 }
-            }
-            if (maxB) {
-                if(item.getPrice()>=maxI){
-                    filtered.remove(item);
+            }if (maxB) {
+                if (filtered.get(i).getPrice() >= maxI) {
+                    filtered.remove(i);
                 }
-            }
-            if (averageMinB) {
-                if(item.getPrice()<=averageMinI){
-                    filtered.remove(item);
+            }if (averageMinB) {
+                if (filtered.get(i).getPrice() <= averageMinI) {
+                    filtered.remove(i);
                 }
-            }
-            if (averageMaxB) {
-                if(item.getPrice()>=averageMaxI){
-                    filtered.remove(item);
+            }if (averageMaxB) {
+                if (filtered.get(i).getPrice() >= averageMaxI) {
+                    filtered.remove(i);
                 }
-            }
-            if (itemB) {
-                if(getItemType(item).equals("Item")){
-                    filtered.remove(item);
+            }if (itemB) {
+                if (getItemType(filtered.get(i)).equals("Item")) {
+                    filtered.remove(i);
                 }
-            }
-            if (modB) {
-                if(getItemType(item).equals("Mod")){
-                    filtered.remove(item);
+            }if (modB) {
+                if (getItemType(filtered.get(i)).equals("Mod")) {
+                    filtered.remove(i);
                 }
-            }
-            if (rivenB) {
-                if(getItemType(item).equals("Riven")){
-                    filtered.remove(item);
+            }if (rivenB) {
+                if (getItemType(filtered.get(i)).equals("Riven")) {
+                    filtered.remove(i);
                 }
-            }
-            if (primeB) {
-                if(getItemType(item).equals("PrimePart")){
-                filtered.remove(item);
-            }
-            }
-            if (RarityB) {
-                if (item instanceof PrimePart) {
-                    PrimePart primePartItem = (PrimePart) item;
-                    if (primePartItem.getRarity() != RarityI) {
-                        filtered.remove(item);
+            }if (primeB) {
+                if (getItemType(filtered.get(i)).equals("PrimePart")) {
+                    filtered.remove(i);
+                }
+            }if (rarityB) {
+                if (getItemType(filtered.get(i)).equals("PrimePart")) {
+                    PrimePart prime = (PrimePart) filtered.get(i);
+                    if (prime.getRarity() != rarityI) {
+                        filtered.remove(i);
+                    }
+                }
             }
         }
 
         return filtered;
     }
-    public void getFiltered (){
+
+    public void getFiltered() {
         support.firePropertyChange("show-allItems", null, Filtring());
+    }
+
+    public void boolChange(String check) {
+        switch (check) {
+            case "select-min":
+                minB = !minB;
+                break;
+            case "select-max":
+                maxB = !maxB;
+                break;
+            case "select-averageMin":
+                averageMinB = !averageMinB;
+                break;
+            case "select-averageMax":
+                averageMaxB = !averageMaxB;
+                break;
+            case "select-item":
+                itemB = !itemB;
+                break;
+            case "select-mod":
+                modB = !modB;
+                break;
+            case "select-prime":
+                primeB = !primeB;
+                break;
+            case "select-riven":
+                rivenB = !rivenB;
+                break;
+            case "select-rarity":
+                rarityB = !rarityB;
+                break;
+        }
+    }
+
+    public void updateMinI(String min) {
+        if (min.matches("0|[1-9]\\d*")) {
+            minI = Integer.parseInt(min);
+        } else {
+            minI = 0;
+        }
+    }
+
+    public void updateMaxI(String max) {
+        if (max.matches("0|[1-9]\\d*")) {
+            maxI = Integer.parseInt(max);
+        } else {
+            maxI = 0;
+        }
+    }
+
+    public void updateAverageMinI(String averageMin) {
+        if (averageMin.matches("0|[1-9]\\d*")) {
+            averageMinI = Integer.parseInt(averageMin);
+        } else {
+            averageMinI = 0;
+        }
+    }
+
+    public void updateAverageMaxI(String averageMax) {
+        if (averageMax.matches("0|[1-9]\\d*")) {
+            averageMaxI = Integer.parseInt(averageMax);
+        } else {
+            averageMaxI = 0;
+        }
+    }
+
+    public void updateRarityI(String rarity){
+        rarityI=Integer.parseInt(rarity);
     }
 
 

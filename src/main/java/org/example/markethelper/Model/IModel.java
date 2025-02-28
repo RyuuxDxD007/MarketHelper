@@ -17,4 +17,10 @@ public interface IModel {
     String getItemReroll(Item item);
     String getItemPolarity(Item item);
     String getItemType(Item item);
+    void boolChange(String check);
+    void updateMinI(String min);
+    void updateMaxI(String max);
+    void updateAverageMinI(String averageMin);
+    void updateAverageMaxI(String averageMax);
+    void updateRarityI(String rarity);
 }

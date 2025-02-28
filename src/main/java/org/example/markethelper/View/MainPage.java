@@ -51,7 +51,7 @@ public class MainPage implements PropertyChangeListener, IView{
         switch (evt.getPropertyName()) {
             case "show-allItems":
                 ArrayList<Item> updatedItems = (ArrayList<Item>) evt.getNewValue();
-                Platform.runLater(() -> showAllItems(updatedItems));
+                showAllItems(updatedItems);
                 break;
             default:
                 break;
@@ -79,23 +79,43 @@ public class MainPage implements PropertyChangeListener, IView{
         //CheckBox check1 = new CheckBox("Vaulted");
         //CheckBox check2 = new CheckBox("Ressurgence");
         CheckBox check3 = new CheckBox("Min");
+        check3.setOnAction(controller.generateEventHandlerAction("select-min",supplier));
         CheckBox check4 = new CheckBox("Max");
+        check4.setOnAction(controller.generateEventHandlerAction("select-max",supplier));
         TextField minField = new TextField();
+        minField.textProperty().addListener((observable, oldValue, newValue) -> controller.minFieldChange(newValue));
         TextField maxField = new TextField();
-        filtringBox1.getChildren().addAll(check3, minField, check4, maxField);
+        maxField.textProperty().addListener((observable, oldValue, newValue) -> controller.maxFieldChange(newValue));
+        CheckBox check5 = new CheckBox("Average Min");
+        check5.setOnAction(controller.generateEventHandlerAction("select-averageMin",supplier));
+        TextField averageMinField = new TextField();
+        averageMinField.textProperty().addListener((observable, oldValue, newValue) -> controller.averageMinFieldChange(newValue));
+        CheckBox check1 = new CheckBox("Average Max");
+        check5.setOnAction(controller.generateEventHandlerAction("select-averageMax",supplier));
+        TextField averageMaxField = new TextField();
+        averageMaxField.textProperty().addListener((observable, oldValue, newValue) -> controller.averageMaxFieldChange(newValue));
+        filtringBox1.getChildren().addAll(check3, minField, check4, maxField, check5, averageMinField, check1, averageMaxField);
 
         HBox filtringBox2 = new HBox(20);
         filtringBox2.setAlignment(Pos.CENTER);
-        CheckBox check5 = new CheckBox("Average");
-        TextField averageField = new TextField();
         CheckBox check6 = new CheckBox("Items");
+        check6.setSelected(true);
+        check6.setOnAction(controller.generateEventHandlerAction("select-item",supplier));
         CheckBox check7 = new CheckBox("Prime");
+        check7.setSelected(true);
+        check7.setOnAction(controller.generateEventHandlerAction("select-prime",supplier));
         CheckBox check8 = new CheckBox("Mods");
+        check8.setSelected(true);
+        check8.setOnAction(controller.generateEventHandlerAction("select-mod",supplier));
         CheckBox check9 = new CheckBox("Riven");
+        check9.setSelected(true);
+        check9.setOnAction(controller.generateEventHandlerAction("select-riven",supplier));
         CheckBox check10 = new CheckBox("Rarity");
+        check10.setOnAction(controller.generateEventHandlerAction("select-rarity",supplier));
         ComboBox<String> rarityCombo = new ComboBox<>();
         rarityCombo.setItems(FXCollections.observableArrayList("10", "25", "45", "65", "100"));
-        filtringBox2.getChildren().addAll(check5, averageField, check6, check7, check8, check9, check10, rarityCombo);
+        rarityCombo.valueProperty().addListener((observable, oldValue, newValue) -> {controller.rarityFieldChange(newValue);});
+        filtringBox2.getChildren().addAll(check6, check7, check8, check9, check10, rarityCombo);
 
 
         itemTable = new TableView<>();
@@ -143,7 +163,6 @@ public class MainPage implements PropertyChangeListener, IView{
         actualParent.getChildren().addAll(filtringBox1, filtringBox2, itemTable, buttonBox);
         controller.showAllItems();
 
-
         scene = new Scene(actualParent,1300,600);
         stage.setScene(scene);
     }
@@ -151,6 +170,22 @@ public class MainPage implements PropertyChangeListener, IView{
     public void showAllItems(ArrayList<Item> listItems) {
         if (itemTable != null) {
             itemTable.getItems().setAll(listItems);
+        }
+    }
+    public int fieldToString(String text){
+        if(text.matches("0|[1-9]\\d*")){
+            return Integer.parseInt(text);
+        }
+        else {
+            return 0;
+        }
+    }
+    public int comboNotNull(ComboBox<Integer> comboBox){
+        if(comboBox.getValue()==null){
+            return 0;
+        }
+        else {
+            return comboBox.getValue();
         }
     }
 
