@@ -48,6 +48,8 @@ public class PrimaryModel implements IModel {
     private int averageMaxI;
     private int rarityI;
 
+    private int totalsize;
+
 
     public PrimaryModel() {
         support = new PropertyChangeSupport(this);
@@ -86,6 +88,7 @@ public class PrimaryModel implements IModel {
         all.addAll(mods);
         all.addAll(rivens);
         all.addAll(primeparts);
+        totalsize = all.size();
         return all;
     }
 
@@ -264,6 +267,35 @@ public class PrimaryModel implements IModel {
 
     public void updateRarityI(String rarity){
         rarityI=Integer.parseInt(rarity);
+    }
+
+    public void createItem(String name, int price) {
+        Item item = new Item(totalsize+1,name,price);
+        itemDAO.addItem(item);
+    }
+
+    public void createMod(String name, int price, String polarity) {
+        Mod mod = new Mod(totalsize+1,name,price,polarity);
+        modDAO.addMod(mod);
+    }
+
+    public void createPrimePart(String name, int price, int rarity, String color) {
+        if(rarity==15){
+            color = "Bronze";
+        }
+        else if(rarity==45){
+            color = "Silver";
+        }
+        else if(rarity==100){
+            color = "Gold";
+        }
+        PrimePart prime = new PrimePart(totalsize+1,name,price,rarity,color);
+        primePartDAO.addPrimePart(prime);
+    }
+
+    public void createRiven(String name, int price, String polarity, int reroll) {
+        Riven riven = new Riven(totalsize+1,name,price,polarity,reroll);
+        rivenDAO.addRiven(riven);
     }
 
 

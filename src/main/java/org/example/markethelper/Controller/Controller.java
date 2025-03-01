@@ -86,12 +86,37 @@ public class Controller {
                     //showItem(selected);
                 };
                 break;
-                //need fix
+            //need fix
             case "delete-item":
                 t = x -> showAllItems();
                 break;
+            case "create-item":
+                t = x -> {
+                    createItem(x[0],x[1]);
+                    changeView("view-mainPage");
+                };
+                break;
+            case "create-mod":
+                t = x -> {
+                    createMod(x[0],x[1],x[2]);
+                    changeView("view-mainPage");
+                };
+                break;
+            case "create-primePart":
+                t = x -> {
+                    createPrimePart(x[0],x[1],x[2],x[3]);
+                    changeView("view-mainPage");
+                };
+                break;
+            case "create-riven":
+                t = x -> {
+                    createRiven(x[0],x[1],x[2],x[3]);
+                    changeView("view-mainPage");
+                };
+                break;
 
-            //User related and view changes
+
+            //User related and view change from user
             case "create-user":
                 t = (x) -> {
                     if (this.createUser(x[0], x[1])) {
@@ -157,6 +182,9 @@ public class Controller {
             case "view-identification":
                 t = (x) -> changeView(action);
                 break;
+            case "view-mainPage":
+                t = (x) -> changeView(action);
+                break;
             default:
                 throw new InvalidParameterException(action + " n'existe pas.");
         }
@@ -201,9 +229,11 @@ public class Controller {
     public String getItemRarity(Item item) {
         return this.model.getItemRarity(item);
     }
+
     public String getItemReroll(Item item) {
         return this.model.getItemReroll(item);
     }
+
     public String getItemPolarity(Item item) {
         return this.model.getItemPolarity(item);
     }
@@ -221,14 +251,17 @@ public class Controller {
         this.model.updateMinI(min);
         this.model.getFiltered();
     }
+
     public void maxFieldChange(String max) {
         this.model.updateMaxI(max);
         this.model.getFiltered();
     }
+
     public void averageMinFieldChange(String averageMin) {
         this.model.updateAverageMinI(averageMin);
         this.model.getFiltered();
     }
+
     public void averageMaxFieldChange(String averageMax) {
         this.model.updateAverageMaxI(averageMax);
         this.model.getFiltered();
@@ -239,6 +272,18 @@ public class Controller {
         this.model.getFiltered();
     }
 
+    public void createItem(String name, String price) {
+        this.model.createItem(name, Integer.parseInt(price));
+    }
+    public void createMod(String name, String price, String polarity) {
+        this.model.createMod(name, Integer.parseInt(price),polarity);
+    }
+    public void createPrimePart(String name, String price, String rarity, String color) {
+        this.model.createPrimePart(name, Integer.parseInt(price),Integer.parseInt(rarity),color);
+    }
+    public void createRiven(String name, String price, String polarity, String reroll) {
+        this.model.createRiven(name, Integer.parseInt(price), polarity, Integer.parseInt(reroll));
+    }
 
     //need to add model actions
 }

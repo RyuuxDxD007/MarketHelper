@@ -3,6 +3,7 @@ package org.example.markethelper.View;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -72,6 +73,7 @@ public class MainPage implements PropertyChangeListener, IView{
     @Override
     public void showPrincipalWindow(){
         actualParent = new VBox();
+        actualParent.setPadding(new Insets(10,10,10,10));
         Supplier<String[]> supplier = () -> new String[]{""};
 
         HBox filtringBox1 = new HBox(20);

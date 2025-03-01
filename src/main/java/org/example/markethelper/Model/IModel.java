@@ -23,4 +23,8 @@ public interface IModel {
     void updateAverageMinI(String averageMin);
     void updateAverageMaxI(String averageMax);
     void updateRarityI(String rarity);
+    void createItem(String name, int i);
+    void createMod(String name, int i, String polarity);
+    void createPrimePart(String name, int i, int i1, String color);
+    void createRiven(String name, int i, String polarity, int i1);
 }

@@ -2,8 +2,12 @@ package org.example.markethelper.View;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -56,34 +60,76 @@ public class VNewItem implements IView {
     @Override
     public void showPrincipalWindow() {
         actualParent = new VBox(50);
-        HBox choiceBox = new HBox(50);
+        actualParent.setPadding(new Insets(50,50,50,50));
+
+        HBox choiceBox = new HBox(20);
+        Label choiceLabel = new Label("Type of item you would like to add : ");
         ComboBox<String> choiceCombo = new ComboBox<>();
         choiceCombo.setItems(FXCollections.observableArrayList("Item", "Mod", "PrimePart", "Riven"));
-        choiceBox.getChildren().add(choiceCombo);
+        choiceBox.getChildren().addAll(choiceLabel,choiceCombo);
         actualParent.getChildren().add(choiceBox);
 
-        if(choiceCombo.getValue().equals("Item")) {
-            showNewItemWindow();
-        }
-        else if(choiceCombo.getValue().equals("Mod")) {
-            showNewModWindow();
-        }
-        else if(choiceCombo.getValue().equals("PrimePart")) {
-            showNewPrimePartWindow();
-        }
-        else if(choiceCombo.getValue().equals("Riven")) {
-            showNewRivenWindow();
-        }
+        VBox controlBox = new VBox(20);
+        controlBox.setAlignment(Pos.BOTTOM_CENTER);
+        HBox buttonBox = new HBox(20);
+        buttonBox.setAlignment(Pos.BOTTOM_CENTER);
+        Button confirmButton = new Button("Confirm");
+        Button cancelButton = new Button("Cancel");
+        Supplier<String[]> supplier = () -> new String[]{""};
+        cancelButton.setOnAction(e -> {controller.generateEventHandlerAction("view-mainPage",supplier);});
+        buttonBox.getChildren().addAll(confirmButton,cancelButton);
 
+        choiceCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
+            actualParent.getChildren().removeIf(node -> node instanceof VBox);
+            switch (newValue) {
+                case "Item":
+                    Supplier<String[]> supplierItem = showNewItemWindow();
+                    confirmButton.setOnAction(e -> {
+                        EventHandler<ActionEvent> handler = controller.generateEventHandlerAction("create-item",supplierItem);
+                        handler.handle(new ActionEvent());
+                    });
+                    actualParent.getChildren().remove(buttonBox);
+                    actualParent.getChildren().add(buttonBox);
+                    break;
+                case "Mod":
+                    Supplier<String[]> supplierMod = showNewModWindow();
+                    confirmButton.setOnAction(e -> {
+                        EventHandler<ActionEvent> handler = controller.generateEventHandlerAction("create-mod",supplierMod);
+                        handler.handle(new ActionEvent());
+                    });
+                    actualParent.getChildren().remove(buttonBox);
+                    actualParent.getChildren().add(buttonBox);
+                    break;
+                case "PrimePart":
+                    Supplier<String[]> supplierPrime = showNewPrimePartWindow();
+                    confirmButton.setOnAction(e -> {
+                        EventHandler<ActionEvent> handler = controller.generateEventHandlerAction("create-primepart",supplierPrime);
+                        handler.handle(new ActionEvent());
+                    });
+                    actualParent.getChildren().remove(buttonBox);
+                    actualParent.getChildren().add(buttonBox);
+                    break;
+                case "Riven":
+                    Supplier<String[]> supplierRiven = showNewRivenWindow();
+                    confirmButton.setOnAction(e -> {
+                        EventHandler<ActionEvent> handler = controller.generateEventHandlerAction("create-riven",supplierRiven);
+                        handler.handle(new ActionEvent());
+                    });
+                    actualParent.getChildren().remove(buttonBox);
+                    actualParent.getChildren().add(buttonBox);
+                    break;
+            }
+        });
+
+        actualParent.getChildren().add(buttonBox);
         scene = new Scene(actualParent,1300,600);
         stage.setScene(scene);
     }
-    public void showNewItemWindow(){
+    public Supplier<String[]> showNewItemWindow(){
         VBox newItemBox = new VBox(50);
 
         HBox titleBox = new HBox(50);
-        titleBox.setAlignment(Pos.CENTER);
-        Label titleLabel = new Label("New Item");
+        Label titleLabel = new Label("New Item info");
         titleBox.getChildren().add(titleLabel);
 
         HBox nameBox = new HBox(20);
@@ -100,13 +146,14 @@ public class VNewItem implements IView {
 
         actualParent.getChildren().add(newItemBox);
 
+        return () -> new String[]{nameField.getText(), priceField.getText()};
+
     }
-    public void showNewModWindow(){
+    public Supplier<String[]> showNewModWindow(){
         VBox newModBox = new VBox(50);
 
         HBox titleBox = new HBox(50);
-        titleBox.setAlignment(Pos.CENTER);
-        Label titleLabel = new Label("New Mod");
+        Label titleLabel = new Label("New Mod info");
         titleBox.getChildren().add(titleLabel);
 
         HBox nameBox = new HBox(20);
@@ -127,13 +174,13 @@ public class VNewItem implements IView {
 
         newModBox.getChildren().addAll(titleBox, nameBox, priceBox, polarityBox);
         actualParent.getChildren().add(newModBox);
+        return () -> new String[] {nameField.getText(), priceField.getText(), polarityCombo.getValue()};
     }
-    public void showNewPrimePartWindow(){
+    public Supplier<String[]> showNewPrimePartWindow(){
         VBox newPrimePartBox = new VBox(50);
 
         HBox titleBox = new HBox(50);
-        titleBox.setAlignment(Pos.CENTER);
-        Label titleLabel = new Label("New PrimePart");
+        Label titleLabel = new Label("New PrimePart info");
         titleBox.getChildren().add(titleLabel);
 
         HBox nameBox = new HBox(20);
@@ -152,34 +199,35 @@ public class VNewItem implements IView {
         rarityCombo.setItems(FXCollections.observableArrayList("15", "25", "45", "65", "100"));
         rarityBox.getChildren().addAll(rarityLabel, rarityCombo);
 
-        if(rarityCombo.getValue().equals("25")){
-            HBox colorBox1 = new HBox(20);
-            Label colorLabel1 = new Label("Color : ");
-            ComboBox<String> colorCombo1 = new ComboBox<>();
-            colorCombo1.setItems(FXCollections.observableArrayList("Bronze", "Silver"));
-            colorBox1.getChildren().addAll(colorLabel1, colorCombo1);
+        VBox colorVBox = new VBox();
+        ComboBox<String> colorCombo = new ComboBox<>();
 
-            newPrimePartBox.getChildren().addAll(titleBox, nameBox, priceBox, rarityBox, colorBox1);
-        }
-        else if(rarityCombo.getValue().equals("65")){
-            HBox colorBox2 = new HBox(20);
-            Label colorLabel2 = new Label("Color : ");
-            ComboBox<String> colorCombo2 = new ComboBox<>();
-            colorCombo2.setItems(FXCollections.observableArrayList("Silver", "Gold"));
-            colorBox2.getChildren().addAll(colorLabel2, colorCombo2);
-
-            newPrimePartBox.getChildren().addAll(titleBox, nameBox, priceBox, rarityBox, colorBox2);
-        }else {
-            newPrimePartBox.getChildren().addAll(titleBox, nameBox, priceBox, rarityBox);
-        }
+        rarityCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
+            colorVBox.getChildren().clear();
+            if ("25".equals(newValue)) {
+                HBox colorBox = new HBox(20);
+                Label colorLabel = new Label("Color : ");
+                colorCombo.setItems(FXCollections.observableArrayList("Bronze", "Silver"));
+                colorBox.getChildren().addAll(colorLabel, colorCombo);
+                colorVBox.getChildren().add(colorBox);
+            }
+            else if ("65".equals(newValue)) {
+                HBox colorBox = new HBox(20);
+                Label colorLabel = new Label("Color : ");
+                colorCombo.setItems(FXCollections.observableArrayList("Silver", "Gold"));
+                colorBox.getChildren().addAll(colorLabel, colorCombo);
+                colorVBox.getChildren().add(colorBox);
+            }
+        });
+        newPrimePartBox.getChildren().addAll(titleBox, nameBox, priceBox, rarityBox, colorVBox);
         actualParent.getChildren().add(newPrimePartBox);
+        return () -> new String[]{nameField.getText(), priceField.getText(), rarityCombo.getValue(), colorCombo.getValue()};
     }
-    public void showNewRivenWindow(){
+    public Supplier<String[]> showNewRivenWindow(){
         VBox newRivenBox = new VBox(50);
 
         HBox titleBox = new HBox(50);
-        titleBox.setAlignment(Pos.CENTER);
-        Label titleLabel = new Label("Riven");
+        Label titleLabel = new Label("Riven info");
         titleBox.getChildren().add(titleLabel);
 
         HBox nameBox = new HBox(20);
@@ -205,5 +253,7 @@ public class VNewItem implements IView {
 
         newRivenBox.getChildren().addAll(titleBox, nameBox, priceBox, polarityBox, rerollBox);
         actualParent.getChildren().add(newRivenBox);
+
+        return () -> new String[]{nameField.getText(), priceField.getText(),polarityCombo.getValue(), rerollField.getText()};
     }
 }
