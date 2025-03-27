@@ -76,7 +76,10 @@ public class VNewItem implements IView {
         Button confirmButton = new Button("Confirm");
         Button cancelButton = new Button("Cancel");
         Supplier<String[]> supplier = () -> new String[]{""};
-        cancelButton.setOnAction(e -> {controller.generateEventHandlerAction("view-mainPage",supplier);});
+        cancelButton.setOnAction(e -> {
+            EventHandler<ActionEvent> handler = controller.generateEventHandlerAction("view-mainPage", supplier);
+            handler.handle(new ActionEvent());
+        });
         buttonBox.getChildren().addAll(confirmButton,cancelButton);
 
         choiceCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -103,7 +106,7 @@ public class VNewItem implements IView {
                 case "PrimePart":
                     Supplier<String[]> supplierPrime = showNewPrimePartWindow();
                     confirmButton.setOnAction(e -> {
-                        EventHandler<ActionEvent> handler = controller.generateEventHandlerAction("create-primepart",supplierPrime);
+                        EventHandler<ActionEvent> handler = controller.generateEventHandlerAction("create-primePart",supplierPrime);
                         handler.handle(new ActionEvent());
                     });
                     actualParent.getChildren().remove(buttonBox);

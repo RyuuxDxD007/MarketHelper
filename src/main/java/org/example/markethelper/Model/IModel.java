@@ -1,6 +1,7 @@
 package org.example.markethelper.Model;
 
 import org.example.markethelper.Model.BL.Item;
+import org.example.markethelper.Model.BL.PrimePart;
 import org.example.markethelper.Model.BL.PrimeSet;
 
 import java.beans.PropertyChangeListener;
@@ -31,4 +32,6 @@ public interface IModel {
     String getPrimePartName(PrimeSet set, int i);
     void getFilteredSets();
     void boolReset();
+    ArrayList<PrimePart> getAllPrimeParts();
+    void createSet(String name, int price, int part1, int part2, int part3, int part4, int part5, int part6);
 }

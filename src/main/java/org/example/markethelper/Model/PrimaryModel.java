@@ -48,7 +48,9 @@ public class PrimaryModel implements IModel {
     private int averageMaxI;
     private int rarityI;
 
-    private int totalsize;
+    private int totalSizeItems;
+    private int totalSizeSets;
+    final private int ERROR_CODE = -1;
 
 
     public PrimaryModel() {
@@ -88,12 +90,19 @@ public class PrimaryModel implements IModel {
         all.addAll(mods);
         all.addAll(rivens);
         all.addAll(primeparts);
-        totalsize = all.size();
+        totalSizeItems = all.size();
         return all;
     }
 
-    public void getAllPrimeSets() {
-        support.firePropertyChange("show-allSets", null, primeSetDAO.getAllPrimeSets());
+    public ArrayList<PrimeSet> getAllPrimeSets() {
+        ArrayList<PrimeSet> all = new ArrayList<>();
+        all = primeSetDAO.getAllPrimeSets();
+        totalSizeSets = all.size();
+        return all;
+    }
+
+    public ArrayList<PrimePart> getAllPrimeParts() {
+        return primePartDAO.getPrimeParts();
     }
 
     public void getAllRelics() {
@@ -288,12 +297,12 @@ public class PrimaryModel implements IModel {
     }
 
     public void createItem(String name, int price) {
-        Item item = new Item(totalsize+1,name,price);
+        Item item = new Item(totalSizeItems+1,name,price);
         itemDAO.addItem(item);
     }
 
     public void createMod(String name, int price, String polarity) {
-        Mod mod = new Mod(totalsize+1,name,price,polarity);
+        Mod mod = new Mod(totalSizeItems+1,name,price,polarity);
         modDAO.addMod(mod);
     }
 
@@ -307,12 +316,12 @@ public class PrimaryModel implements IModel {
         else if(rarity==100){
             color = "Gold";
         }
-        PrimePart prime = new PrimePart(totalsize+1,name,price,rarity,color);
+        PrimePart prime = new PrimePart(totalSizeItems+1,name,price,rarity,color);
         primePartDAO.addPrimePart(prime);
     }
 
     public void createRiven(String name, int price, String polarity, int reroll) {
-        Riven riven = new Riven(totalsize+1,name,price,polarity,reroll);
+        Riven riven = new Riven(totalSizeItems+1,name,price,polarity,reroll);
         rivenDAO.addRiven(riven);
     }
 
@@ -334,7 +343,7 @@ public class PrimaryModel implements IModel {
     }
     public ArrayList<PrimeSet> SetFiltring() {
         ArrayList<PrimeSet> filtered = new ArrayList<>();
-        filtered = primeSetDAO.getAllPrimeSets();
+        filtered = getAllPrimeSets();
         for (int i = filtered.size() - 1; i >= 0; i--){
             if (minB) {
                 if (filtered.get(i).getSetPrice() <= minI) {
@@ -356,6 +365,30 @@ public class PrimaryModel implements IModel {
         }
 
         return filtered;
+    }
+
+    public void createSet(String name, int price, int part1, int part2, int part3, int part4, int part5, int part6) {
+
+        ArrayList<PrimePart> primeParts = new ArrayList<>();
+        addNotNullPart(primeParts,part1);
+        addNotNullPart(primeParts,part2);
+        addNotNullPart(primeParts,part3);
+        addNotNullPart(primeParts,part4);
+        addNotNullPart(primeParts,part5);
+        addNotNullPart(primeParts,part6);
+
+        PrimeSet set = new PrimeSet(totalSizeSets+1,name, primeParts, price);
+        primeSetDAO.addPrimeSet(set);
+        for (PrimePart part : primeParts) {
+            primeSetDAO.addPrimePartToSet(totalSizeSets+1, part);
+        }
+    }
+
+    private void addNotNullPart(ArrayList<PrimePart> primeParts, int id) {
+        if (id != ERROR_CODE) {
+            PrimePart part = primePartDAO.getPrimePart(id);
+            primeParts.add(part);
+        }
     }
 
 

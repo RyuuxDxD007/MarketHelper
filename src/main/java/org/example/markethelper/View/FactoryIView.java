@@ -20,7 +20,7 @@ public class FactoryIView {
             case "view-newItem":
                 return (IView) new VNewItem(app);
             case "view-newSet":
-                return (IView) new VNewItem(app);
+                return (IView) new VNewSet(app);
             default :
                 throw new InvalidParameterException("unknown view : " + view);
         }

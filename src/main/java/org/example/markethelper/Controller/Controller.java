@@ -5,14 +5,12 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.WindowEvent;
 import org.example.markethelper.Model.*;
-import org.example.markethelper.Model.BL.Item;
-import org.example.markethelper.Model.BL.Mod;
-import org.example.markethelper.Model.BL.PrimeSet;
-import org.example.markethelper.Model.BL.Riven;
+import org.example.markethelper.Model.BL.*;
 import org.example.markethelper.View.*;
 
 import java.beans.PropertyChangeListener;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -93,10 +91,30 @@ public class Controller {
                 break;
             case "create-item":
                 t = x -> {
-                    createItem(x[0],x[1]);
+                    createItem(x[0], x[1]);
                     changeView("view-mainPage");
                 };
                 break;
+
+            case "create-mod":
+                t = x -> {
+                    createMod(x[0], x[1], x[2]);
+                    changeView("view-mainPage");
+                };
+                break;
+            case "create-primePart":
+                t = x -> {
+                    createPrimePart(x[0], x[1], x[2], x[3]);
+                    changeView("view-mainPage");
+                };
+                break;
+            case "create-riven":
+                t = x -> {
+                    createRiven(x[0], x[1], x[2], x[3]);
+                    changeView("view-mainPage");
+                };
+                break;
+
             //Set Logics
             case "show-allSets":
                 t = x -> showAllSets();
@@ -111,23 +129,10 @@ public class Controller {
             case "delete-set":
                 t = x -> showAllSets();
                 break;
-
-            case "create-mod":
+            case "create-set":
                 t = x -> {
-                    createMod(x[0],x[1],x[2]);
-                    changeView("view-mainPage");
-                };
-                break;
-            case "create-primePart":
-                t = x -> {
-                    createPrimePart(x[0],x[1],x[2],x[3]);
-                    changeView("view-mainPage");
-                };
-                break;
-            case "create-riven":
-                t = x -> {
-                    createRiven(x[0],x[1],x[2],x[3]);
-                    changeView("view-mainPage");
+                    createSet(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]);
+                    changeView("view-primeSets");
                 };
                 break;
 
@@ -223,6 +228,10 @@ public class Controller {
         return t;
     }
 
+    private void createSet(String name, String price, String part1, String part2, String part3, String part4, String part5, String part6) {
+        this.model.createSet(name, Integer.parseInt(price), Integer.parseInt(part1), Integer.parseInt(part2), Integer.parseInt(part3), Integer.parseInt(part4), Integer.parseInt(part5), Integer.parseInt(part6));
+    }
+
     private boolean createUser(String id, String pass) {
         return this.model.createUser(id, pass);
     }
@@ -285,40 +294,40 @@ public class Controller {
 
     public void minFieldChange(String min, String option) {
         this.model.updateMinI(min);
-        if(option.equals("item")) {
+        if (option.equals("item")) {
             this.model.getFiltered();
         }
-        if(option.equals("set")) {
+        if (option.equals("set")) {
             this.model.getFilteredSets();
         }
     }
 
     public void maxFieldChange(String max, String option) {
         this.model.updateMaxI(max);
-        if(option.equals("item")) {
+        if (option.equals("item")) {
             this.model.getFiltered();
         }
-        if(option.equals("set")) {
+        if (option.equals("set")) {
             this.model.getFilteredSets();
         }
     }
 
     public void averageMinFieldChange(String averageMin, String option) {
         this.model.updateAverageMinI(averageMin);
-        if(option.equals("item")) {
+        if (option.equals("item")) {
             this.model.getFiltered();
         }
-        if(option.equals("set")) {
+        if (option.equals("set")) {
             this.model.getFilteredSets();
         }
     }
 
     public void averageMaxFieldChange(String averageMax, String option) {
         this.model.updateAverageMaxI(averageMax);
-        if(option.equals("item")) {
+        if (option.equals("item")) {
             this.model.getFiltered();
         }
-        if(option.equals("set")) {
+        if (option.equals("set")) {
             this.model.getFilteredSets();
         }
     }
@@ -331,12 +340,15 @@ public class Controller {
     public void createItem(String name, String price) {
         this.model.createItem(name, Integer.parseInt(price));
     }
+
     public void createMod(String name, String price, String polarity) {
-        this.model.createMod(name, Integer.parseInt(price),polarity);
+        this.model.createMod(name, Integer.parseInt(price), polarity);
     }
+
     public void createPrimePart(String name, String price, String rarity, String color) {
-        this.model.createPrimePart(name, Integer.parseInt(price),Integer.parseInt(rarity),color);
+        this.model.createPrimePart(name, Integer.parseInt(price), Integer.parseInt(rarity), color);
     }
+
     public void createRiven(String name, String price, String polarity, String reroll) {
         this.model.createRiven(name, Integer.parseInt(price), polarity, Integer.parseInt(reroll));
     }
@@ -353,5 +365,7 @@ public class Controller {
         this.model.getFilteredSets();
     }
 
-    //need to add model actions
+    public ArrayList<PrimePart> getAllPrimeParts() {
+        return this.model.getAllPrimeParts();
+    }
 }

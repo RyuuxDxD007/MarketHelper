@@ -8,7 +8,7 @@ public class PrimeSet {
     private String setName;
     private ArrayList<PrimePart> primeParts;
     private int setPrice;
-    private double seperatedPrice;
+    private int seperatedPrice;
 
     public PrimeSet(int setId, String setName, ArrayList<PrimePart> primeParts, int setPrice) {
         this.setId = setId;
@@ -43,7 +43,7 @@ public class PrimeSet {
     public void setSetPrice(int setPrice) {
         this.setPrice = setPrice;
     }
-    public double getSeperatedPrice() {
+    public int getSeperatedPrice() {
         return seperatedPrice;
     }
     public void addPart(PrimePart primePart) {

@@ -30,7 +30,7 @@ public class PrimeSetDAO implements IPrimeSetDAO {  // Implementing the IPrimeSe
             }
             statement.close();
 
-            this.insertPrimeSet = this.con.prepareStatement("INSERT INTO PrimeSet (id, setName, setPrice) VALUES (?, ?)");
+            this.insertPrimeSet = this.con.prepareStatement("INSERT INTO PrimeSet (id, setName, setPrice) VALUES (?, ?, ?)");
             this.deletePrimeSet = this.con.prepareStatement("DELETE FROM PrimeSet WHERE id=?");
             this.getAllPrimeSets = this.con.prepareStatement("SELECT * FROM PrimeSet");
             this.getPrimeSet = this.con.prepareStatement("SELECT * FROM PrimeSet WHERE id = ?");
