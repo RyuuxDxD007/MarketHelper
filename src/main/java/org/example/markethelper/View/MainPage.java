@@ -85,17 +85,17 @@ public class MainPage implements PropertyChangeListener, IView{
         CheckBox check4 = new CheckBox("Max");
         check4.setOnAction(controller.generateEventHandlerAction("select-max",supplier));
         TextField minField = new TextField();
-        minField.textProperty().addListener((observable, oldValue, newValue) -> controller.minFieldChange(newValue));
+        minField.textProperty().addListener((observable, oldValue, newValue) -> controller.minFieldChange(newValue,"item"));
         TextField maxField = new TextField();
-        maxField.textProperty().addListener((observable, oldValue, newValue) -> controller.maxFieldChange(newValue));
+        maxField.textProperty().addListener((observable, oldValue, newValue) -> controller.maxFieldChange(newValue,"item"));
         CheckBox check5 = new CheckBox("Average Min");
         check5.setOnAction(controller.generateEventHandlerAction("select-averageMin",supplier));
         TextField averageMinField = new TextField();
-        averageMinField.textProperty().addListener((observable, oldValue, newValue) -> controller.averageMinFieldChange(newValue));
+        averageMinField.textProperty().addListener((observable, oldValue, newValue) -> controller.averageMinFieldChange(newValue,"item"));
         CheckBox check1 = new CheckBox("Average Max");
         check5.setOnAction(controller.generateEventHandlerAction("select-averageMax",supplier));
         TextField averageMaxField = new TextField();
-        averageMaxField.textProperty().addListener((observable, oldValue, newValue) -> controller.averageMaxFieldChange(newValue));
+        averageMaxField.textProperty().addListener((observable, oldValue, newValue) -> controller.averageMaxFieldChange(newValue,"item"));
         filtringBox1.getChildren().addAll(check3, minField, check4, maxField, check5, averageMinField, check1, averageMaxField);
 
         HBox filtringBox2 = new HBox(20);
@@ -172,22 +172,6 @@ public class MainPage implements PropertyChangeListener, IView{
     public void showAllItems(ArrayList<Item> listItems) {
         if (itemTable != null) {
             itemTable.getItems().setAll(listItems);
-        }
-    }
-    public int fieldToString(String text){
-        if(text.matches("0|[1-9]\\d*")){
-            return Integer.parseInt(text);
-        }
-        else {
-            return 0;
-        }
-    }
-    public int comboNotNull(ComboBox<Integer> comboBox){
-        if(comboBox.getValue()==null){
-            return 0;
-        }
-        else {
-            return comboBox.getValue();
         }
     }
 

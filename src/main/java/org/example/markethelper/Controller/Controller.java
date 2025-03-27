@@ -7,6 +7,7 @@ import javafx.stage.WindowEvent;
 import org.example.markethelper.Model.*;
 import org.example.markethelper.Model.BL.Item;
 import org.example.markethelper.Model.BL.Mod;
+import org.example.markethelper.Model.BL.PrimeSet;
 import org.example.markethelper.Model.BL.Riven;
 import org.example.markethelper.View.*;
 
@@ -96,6 +97,21 @@ public class Controller {
                     changeView("view-mainPage");
                 };
                 break;
+            //Set Logics
+            case "show-allSets":
+                t = x -> showAllSets();
+                break;
+            case "modify-set":
+                t = x -> {
+                    changeView("view-newSet");
+                    //showSet(selected);
+                };
+                break;
+            //need fix
+            case "delete-set":
+                t = x -> showAllSets();
+                break;
+
             case "create-mod":
                 t = x -> {
                     createMod(x[0],x[1],x[2]);
@@ -136,7 +152,7 @@ public class Controller {
                 };
                 break;
 
-            //Select buttons changing bool
+            //Select buttons changing bool for Items
             case "select-min":
                 t = (x) -> checkPressed(action);
                 break;
@@ -165,6 +181,19 @@ public class Controller {
                 t = (x) -> checkPressed(action);
                 break;
 
+            //Select buttons changing bool for Sets
+            case "select-min-set":
+                t = (x) -> checkPressedSet(action);
+                break;
+            case "select-max-set":
+                t = (x) -> checkPressedSet(action);
+                break;
+            case "select-averageMin-set":
+                t = (x) -> checkPressedSet(action);
+                break;
+            case "select-averageMax-set":
+                t = (x) -> checkPressedSet(action);
+                break;
 
             //view changes
             case "view-newItem":
@@ -185,6 +214,9 @@ public class Controller {
             case "view-mainPage":
                 t = (x) -> changeView(action);
                 break;
+            case "view-newSet":
+                t = (x) -> changeView(action);
+                break;
             default:
                 throw new InvalidParameterException(action + " n'existe pas.");
         }
@@ -196,10 +228,9 @@ public class Controller {
     }
 
     public void changeView(String view) {
+        this.model.boolReset();
         IView newView = FactoryIView.createView(view, this.view);
         newView.setController(this.view.getController());
-        //this.view = newView;
-        //this.view.showPrincipalWindow();
         if (newView instanceof PropertyChangeListener) {
             if (this.view instanceof PropertyChangeListener) {
                 this.model.removePropertyChangeListener((PropertyChangeListener) this.view);
@@ -247,24 +278,49 @@ public class Controller {
         this.model.getFiltered();
     }
 
-    public void minFieldChange(String min) {
+    public void checkPressedSet(String check) {
+        this.model.boolChange(check);
+        this.model.getFilteredSets();
+    }
+
+    public void minFieldChange(String min, String option) {
         this.model.updateMinI(min);
-        this.model.getFiltered();
+        if(option.equals("item")) {
+            this.model.getFiltered();
+        }
+        if(option.equals("set")) {
+            this.model.getFilteredSets();
+        }
     }
 
-    public void maxFieldChange(String max) {
+    public void maxFieldChange(String max, String option) {
         this.model.updateMaxI(max);
-        this.model.getFiltered();
+        if(option.equals("item")) {
+            this.model.getFiltered();
+        }
+        if(option.equals("set")) {
+            this.model.getFilteredSets();
+        }
     }
 
-    public void averageMinFieldChange(String averageMin) {
+    public void averageMinFieldChange(String averageMin, String option) {
         this.model.updateAverageMinI(averageMin);
-        this.model.getFiltered();
+        if(option.equals("item")) {
+            this.model.getFiltered();
+        }
+        if(option.equals("set")) {
+            this.model.getFilteredSets();
+        }
     }
 
-    public void averageMaxFieldChange(String averageMax) {
+    public void averageMaxFieldChange(String averageMax, String option) {
         this.model.updateAverageMaxI(averageMax);
-        this.model.getFiltered();
+        if(option.equals("item")) {
+            this.model.getFiltered();
+        }
+        if(option.equals("set")) {
+            this.model.getFilteredSets();
+        }
     }
 
     public void rarityFieldChange(String rarity) {
@@ -283,6 +339,18 @@ public class Controller {
     }
     public void createRiven(String name, String price, String polarity, String reroll) {
         this.model.createRiven(name, Integer.parseInt(price), polarity, Integer.parseInt(reroll));
+    }
+
+    public String getSetSeperatedPrice(PrimeSet set) {
+        return this.model.getSeperatedSet(set);
+    }
+
+    public String getPrimePartName(PrimeSet set, int i) {
+        return this.model.getPrimePartName(set, i);
+    }
+
+    public void showAllSets() {
+        this.model.getFilteredSets();
     }
 
     //need to add model actions

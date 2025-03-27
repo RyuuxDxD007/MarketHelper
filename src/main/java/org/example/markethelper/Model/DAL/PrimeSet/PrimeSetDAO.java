@@ -23,18 +23,18 @@ public class PrimeSetDAO implements IPrimeSetDAO {  // Implementing the IPrimeSe
             this.con = con;
             Statement statement = con.createStatement();
             try {
-                statement.executeUpdate("CREATE TABLE IF NOT EXISTS PrimeSet (id INT PRIMARY KEY, setPrice INT)");
+                statement.executeUpdate("CREATE TABLE IF NOT EXISTS PrimeSet (id INT PRIMARY KEY, setName VARCHAR(255), setPrice INT)");
                 statement.executeUpdate("CREATE TABLE IF NOT EXISTS PrimeSetPrimePart (primeSetID INT, primePartID INT, PRIMARY KEY (primeSetID, primePartID), FOREIGN KEY (primeSetID) REFERENCES PrimeSet(id), FOREIGN KEY (primePartID) REFERENCES PrimePart(id))");
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
             statement.close();
 
-            this.insertPrimeSet = this.con.prepareStatement("INSERT INTO PrimeSet (id, setPrice) VALUES (?, ?)");
+            this.insertPrimeSet = this.con.prepareStatement("INSERT INTO PrimeSet (id, setName, setPrice) VALUES (?, ?)");
             this.deletePrimeSet = this.con.prepareStatement("DELETE FROM PrimeSet WHERE id=?");
             this.getAllPrimeSets = this.con.prepareStatement("SELECT * FROM PrimeSet");
             this.getPrimeSet = this.con.prepareStatement("SELECT * FROM PrimeSet WHERE id = ?");
-            this.updatePrimeSet = this.con.prepareStatement("UPDATE PrimeSet SET setPrice=? WHERE id=?");
+            this.updatePrimeSet = this.con.prepareStatement("UPDATE PrimeSet SET setName=?, setPrice=? WHERE id=?");
             this.addPrimePartToSet = this.con.prepareStatement("INSERT INTO PrimeSetPrimePart (primeSetID, primePartID) VALUES (?, ?)");
             this.deletePrimePartFromSet = this.con.prepareStatement("DELETE FROM PrimeSetPrimePart WHERE primeSetID = ? AND primePartID = ?");
             this.deletePartFromAll = this.con.prepareStatement("DELETE FROM PrimeSetPrimePart WHERE primePartId = ?");
@@ -48,7 +48,8 @@ public class PrimeSetDAO implements IPrimeSetDAO {  // Implementing the IPrimeSe
     public boolean addPrimeSet(PrimeSet set) {
         try {
             this.insertPrimeSet.setInt(1, set.getSetId());
-            this.insertPrimeSet.setInt(2, set.getSetPrice());
+            this.insertPrimeSet.setString(2,set.getSetName());
+            this.insertPrimeSet.setInt(3, set.getSetPrice());
             this.insertPrimeSet.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -63,7 +64,9 @@ public class PrimeSetDAO implements IPrimeSetDAO {  // Implementing the IPrimeSe
         try {
             ResultSet set = this.getAllPrimeSets.executeQuery();
             while (set.next()) {
-                primeSets.add(new PrimeSet(set.getInt("id"), new ArrayList<PrimePart>(), set.getInt("setPrice")));
+                int setId = set.getInt("id");
+                ArrayList<PrimePart> primeParts = getPrimePartsForSet(setId);
+                primeSets.add(new PrimeSet(setId, set.getString("setName"), primeParts, set.getInt("setPrice")));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -71,13 +74,22 @@ public class PrimeSetDAO implements IPrimeSetDAO {  // Implementing the IPrimeSe
         return primeSets;
     }
 
+
     @Override
     public PrimeSet getPrimeSet(int id) {
         try {
             this.getPrimeSet.setInt(1, id);
             ResultSet set = this.getPrimeSet.executeQuery();
+
             if (set.next()) {
-                return new PrimeSet(set.getInt("id"), new ArrayList<PrimePart>(), set.getInt("setPrice"));
+                ArrayList<PrimePart> primeParts = getPrimePartsForSet(id);
+
+                return new PrimeSet(
+                        set.getInt("id"),
+                        set.getString("setName"),
+                        primeParts,
+                        set.getInt("setPrice")
+                );
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -85,11 +97,13 @@ public class PrimeSetDAO implements IPrimeSetDAO {  // Implementing the IPrimeSe
         return null;
     }
 
+
     @Override
     public boolean updatePrimeSet(PrimeSet set) {
         try {
             this.updatePrimeSet.setInt(1, set.getSetPrice());
-            this.updatePrimeSet.setInt(2, set.getSetId());
+            this.updatePrimeSet.setString(2, set.getSetName());
+            this.updatePrimeSet.setInt(3, set.getSetId());
             this.updatePrimeSet.executeUpdate();
             return true;
         } catch (SQLException e) {

@@ -19,6 +19,8 @@ public class FactoryIView {
                 return (IView) new VPrimeSets(app);
             case "view-newItem":
                 return (IView) new VNewItem(app);
+            case "view-newSet":
+                return (IView) new VNewItem(app);
             default :
                 throw new InvalidParameterException("unknown view : " + view);
         }

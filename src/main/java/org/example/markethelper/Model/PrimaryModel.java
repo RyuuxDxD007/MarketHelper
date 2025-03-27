@@ -200,6 +200,12 @@ public class PrimaryModel implements IModel {
     public void getFiltered() {
         support.firePropertyChange("show-allItems", null, Filtring());
     }
+    public void boolReset(){
+        minB = false;
+        maxB = false;
+        averageMinB = false;
+        averageMaxB = false;
+    }
 
     public void boolChange(String check) {
         switch (check) {
@@ -229,6 +235,18 @@ public class PrimaryModel implements IModel {
                 break;
             case "select-rarity":
                 rarityB = !rarityB;
+                break;
+            case "select-min-set":
+                minB = !minB;
+                break;
+            case "select-max-set":
+                maxB = !maxB;
+                break;
+            case "select-averageMin-set":
+                averageMinB = !averageMinB;
+                break;
+            case "select-averageMax-set":
+                averageMaxB = !averageMaxB;
                 break;
         }
     }
@@ -296,6 +314,48 @@ public class PrimaryModel implements IModel {
     public void createRiven(String name, int price, String polarity, int reroll) {
         Riven riven = new Riven(totalsize+1,name,price,polarity,reroll);
         rivenDAO.addRiven(riven);
+    }
+
+    public String getSeperatedSet(PrimeSet set) {
+        return String.valueOf(set.getSeperatedPrice());
+    }
+
+    public String getPrimePartName(PrimeSet set, int i) {
+        if(i<set.getPrimePartsSize()) {
+            return set.getPrimePart(i).getName();
+        }
+        else {
+            return "--";
+        }
+    }
+
+    public void getFilteredSets() {
+        support.firePropertyChange("show-allSets", null, SetFiltring());
+    }
+    public ArrayList<PrimeSet> SetFiltring() {
+        ArrayList<PrimeSet> filtered = new ArrayList<>();
+        filtered = primeSetDAO.getAllPrimeSets();
+        for (int i = filtered.size() - 1; i >= 0; i--){
+            if (minB) {
+                if (filtered.get(i).getSetPrice() <= minI) {
+                    filtered.remove(i);
+                }
+            }if (maxB) {
+                if (filtered.get(i).getSetPrice() >= maxI) {
+                    filtered.remove(i);
+                }
+            }if (averageMinB) {
+                if (filtered.get(i).getSetPrice() <= averageMinI) {
+                    filtered.remove(i);
+                }
+            }if (averageMaxB) {
+                if (filtered.get(i).getSetPrice() >= averageMaxI) {
+                    filtered.remove(i);
+                }
+            }
+        }
+
+        return filtered;
     }
 
 
