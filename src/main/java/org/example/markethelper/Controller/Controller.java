@@ -145,8 +145,7 @@ public class Controller {
                 break;
             case "modify-set":
                 t = x -> {
-                    changeView("view-newSet");
-                    //showSet(selected);
+                    modify("view-modifySet", x );
                 };
                 break;
             case "delete-set":
@@ -158,6 +157,12 @@ public class Controller {
             case "create-set":
                 t = x -> {
                     createSet(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]);
+                    changeView("view-primeSets");
+                };
+                break;
+            case "update-set":
+                t = x -> {
+                    updatePrimeSet(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8]);
                     changeView("view-primeSets");
                 };
                 break;
@@ -254,6 +259,11 @@ public class Controller {
         return t;
     }
 
+    private void updatePrimeSet(String id, String name, String price, String part1, String part2, String part3, String part4, String part5, String part6) {
+        this.model.updatePrimeSet(Integer.parseInt(id), name, Integer.parseInt(price), Integer.parseInt(part1), Integer.parseInt(part2),
+                Integer.parseInt(part3), Integer.parseInt(part4), Integer.parseInt(part5), Integer.parseInt(part6));
+    }
+
     private void updateRiven(String id, String name, String price, String polarity, String rerolls) {
         this.model.updateRiven(Integer.parseInt(id), name, Integer.parseInt(price), polarity, Integer.parseInt(rerolls));
     }
@@ -279,7 +289,8 @@ public class Controller {
     }
 
     private void createSet(String name, String price, String part1, String part2, String part3, String part4, String part5, String part6) {
-        this.model.createSet(name, Integer.parseInt(price), Integer.parseInt(part1), Integer.parseInt(part2), Integer.parseInt(part3), Integer.parseInt(part4), Integer.parseInt(part5), Integer.parseInt(part6));
+        this.model.createSet(name, Integer.parseInt(price), Integer.parseInt(part1), Integer.parseInt(part2),
+                Integer.parseInt(part3), Integer.parseInt(part4), Integer.parseInt(part5), Integer.parseInt(part6));
     }
 
     private boolean createUser(String id, String pass) {
@@ -429,5 +440,14 @@ public class Controller {
 
     public ArrayList<PrimePart> getAllPrimeParts() {
         return this.model.getAllPrimeParts();
+    }
+
+    public PrimePart getPrimePart(String id){
+        if(id != null && !id.equals("null")){
+            return this.model.getPrimePart(Integer.parseInt(id));
+        }
+        else {
+            return null;
+        }
     }
 }

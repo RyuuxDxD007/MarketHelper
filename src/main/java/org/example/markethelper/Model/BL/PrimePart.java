@@ -26,5 +26,9 @@ public class PrimePart extends Item{
     public String[] toStringArray() {
         return new String[] {"PrimePart",String.valueOf(getId()),getName(),String.valueOf(getPrice()),String.valueOf(getRarity()),getColor()};
     }
+    @Override
+    public String toString(){
+        return getName();
+    }
 
 }

@@ -103,8 +103,8 @@ public class PrimeSetDAO implements IPrimeSetDAO {  // Implementing the IPrimeSe
     @Override
     public boolean updatePrimeSet(PrimeSet set) {
         try {
-            this.updatePrimeSet.setInt(1, set.getSetPrice());
-            this.updatePrimeSet.setString(2, set.getSetName());
+            this.updatePrimeSet.setString(1, set.getSetName());
+            this.updatePrimeSet.setInt(2, set.getSetPrice());
             this.updatePrimeSet.setInt(3, set.getSetId());
             this.updatePrimeSet.executeUpdate();
             return true;

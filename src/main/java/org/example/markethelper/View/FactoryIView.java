@@ -29,8 +29,8 @@ public class FactoryIView {
         switch (view) {
             case "view-modifyItem":
                 return (IView) new VNewItem(app, item);
-            case "view-newSet":
-                return (IView) new VNewSet(app);
+            case "view-modifySet":
+                return (IView) new VNewSet(app, item);
             default :
                 throw new InvalidParameterException("unknown view : " + view);
         }

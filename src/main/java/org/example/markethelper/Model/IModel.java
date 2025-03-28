@@ -33,6 +33,7 @@ public interface IModel {
     void getFilteredSets();
     void boolReset();
     ArrayList<PrimePart> getAllPrimeParts();
+    PrimePart getPrimePart(int i);
     void createSet(String name, int price, int part1, int part2, int part3, int part4, int part5, int part6);
     void deleteItem(int i);
     void deleteSet(int i);
@@ -40,4 +41,5 @@ public interface IModel {
     void updateMod(int id, String name, int price, String polarity);
     void updatePrimePart(int id, String name, int price, int rarity, String color);
     void updateRiven(int id, String name, int price, String polarity, int rerolls);
+    void updatePrimeSet(int id, String name, int price, int part1, int part2, int part3, int part4, int part5, int part6);
 }

@@ -24,11 +24,29 @@ public class VNewSet implements IView{
     private static Stage stage;
     private VBox actualParent;
     private Controller controller;
+    private String[] prefilledData;
+    final private int TYPE = 0;
+    final private int ID = 1;
+    final private int NAME = 2;
+    final private int PRICE = 3;
+    final private int PART1 = 4;
+    final private int PART2 = 5;
+    final private int PART3 = 6;
+    final private int PART4 = 7;
+    final private int PART5 = 8;
+    final private int PART6 = 9;
 
     public VNewSet(IView view) {
         this.view = view;
         this.controller = view.getController();
         this.stage = view.getStage();
+        this.prefilledData = null;
+    }
+    public VNewSet(IView view, String[] prefilledData) {
+        this.view = view;
+        this.controller = view.getController();
+        this.stage = view.getStage();
+        this.prefilledData = prefilledData;
     }
 
     @Override
@@ -67,11 +85,17 @@ public class VNewSet implements IView{
         HBox nameBox = new HBox(20);
         Label nameLabel = new Label("Name : ");
         TextField nameField = new TextField();
+        if (prefilledData != null) {
+            nameField.setText(prefilledData[NAME]);
+        }
         nameBox.getChildren().addAll(nameLabel, nameField);
 
         HBox priceBox = new HBox(20);
         Label priceLabel = new Label("Price : ");
         TextField priceField = new TextField();
+        if (prefilledData != null) {
+            priceField.setText(prefilledData[PRICE]);
+        }
         priceBox.getChildren().addAll(priceLabel, priceField);
         actualParent.getChildren().addAll(titleBox, nameBox, priceBox);
 
@@ -94,6 +118,9 @@ public class VNewSet implements IView{
                 setText(empty ? null : item.getName());
             }
         });
+        if(prefilledData != null && prefilledData[PART1] != null) {
+            primePartsBox1.getSelectionModel().select(controller.getPrimePart(prefilledData[PART1]));
+        }
         Label primePartsLabel2 = new Label("Prime Part 2 : ");
         ComboBox<PrimePart> primePartsBox2 = new ComboBox<>();
         primePartsBox2.setItems(FXCollections.observableArrayList(controller.getAllPrimeParts()));
@@ -111,6 +138,9 @@ public class VNewSet implements IView{
                 setText(empty ? null : item.getName());
             }
         });
+        if(prefilledData != null && prefilledData[PART2] != null) {
+            primePartsBox2.getSelectionModel().select(controller.getPrimePart(prefilledData[PART2]));
+        }
         Label primePartsLabel3 = new Label("Prime Part 3 : ");
         ComboBox<PrimePart> primePartsBox3 = new ComboBox<>();
         primePartsBox3.setItems(FXCollections.observableArrayList(controller.getAllPrimeParts()));
@@ -128,6 +158,9 @@ public class VNewSet implements IView{
                 setText(empty ? null : item.getName());
             }
         });
+        if(prefilledData != null && prefilledData[PART3] != null) {
+            primePartsBox3.getSelectionModel().select(controller.getPrimePart(prefilledData[PART3]));
+        }
         Label primePartsLabel4 = new Label("Prime Part 4 : ");
         ComboBox<PrimePart> primePartsBox4 = new ComboBox<>();
         primePartsBox4.setItems(FXCollections.observableArrayList(controller.getAllPrimeParts()));
@@ -145,6 +178,9 @@ public class VNewSet implements IView{
                 setText(empty ? null : item.getName());
             }
         });
+        if(prefilledData != null && prefilledData[PART4] != null) {
+            primePartsBox4.getSelectionModel().select(controller.getPrimePart(prefilledData[PART4]));
+        }
         Label primePartsLabel5 = new Label("Prime Part 5 : ");
         ComboBox<PrimePart> primePartsBox5 = new ComboBox<>();
         primePartsBox5.setItems(FXCollections.observableArrayList(controller.getAllPrimeParts()));
@@ -162,6 +198,9 @@ public class VNewSet implements IView{
                 setText(empty ? null : item.getName());
             }
         });
+        if(prefilledData != null && prefilledData[PART5] != null) {
+            primePartsBox5.getSelectionModel().select(controller.getPrimePart(prefilledData[PART5]));
+        }
         Label primePartsLabel6 = new Label("Prime Part 6 : ");
         ComboBox<PrimePart> primePartsBox6 = new ComboBox<>();
         primePartsBox6.setItems(FXCollections.observableArrayList(controller.getAllPrimeParts()));
@@ -179,6 +218,9 @@ public class VNewSet implements IView{
                 setText(empty ? null : item.getName());
             }
         });
+        if(prefilledData != null && prefilledData[PART6] != null) {
+            primePartsBox6.getSelectionModel().select(controller.getPrimePart(prefilledData[PART6]));
+        }
         primePartsBox.getChildren().addAll(primePartsLabel1, primePartsBox1, primePartsLabel2, primePartsBox2, primePartsLabel3
                 , primePartsBox3, primePartsLabel4, primePartsBox4, primePartsLabel5, primePartsBox5, primePartsLabel6, primePartsBox6);
 
@@ -216,7 +258,21 @@ public class VNewSet implements IView{
                     (part5 != null && part6 != null && part5.getId() == part6.getId())) {
                 showErrorMessage("Duplicate Prime Parts are not allowed.");
             }
-
+            else if (prefilledData != null){
+                Supplier<String[]> supplierItem = () -> new String[]{
+                        prefilledData[ID],
+                        nameField.getText(),
+                        priceField.getText(),
+                        part1 != null ? String.valueOf(part1.getId()) : "-1",
+                        part2 != null ? String.valueOf(part2.getId()) : "-1",
+                        part3 != null ? String.valueOf(part3.getId()) : "-1",
+                        part4 != null ? String.valueOf(part4.getId()) : "-1",
+                        part5 != null ? String.valueOf(part5.getId()) : "-1",
+                        part6 != null ? String.valueOf(part6.getId()) : "-1"
+                };
+                EventHandler<ActionEvent> handler = controller.generateEventHandlerAction("update-set", supplierItem);
+                handler.handle(new ActionEvent());
+            }
             else {
                 Supplier<String[]> supplierItem = () -> new String[]{
                         nameField.getText(),

@@ -55,4 +55,16 @@ public class PrimeSet {
     public int getPrimePartsSize(){
         return primeParts.size();
     }
+    public String[] toStringArray() {
+        String[] set = new String[10];
+        set[0] = "PrimeSet";
+        set[1] = String.valueOf(getSetId());
+        set[2] = getSetName();
+        set[3] = String.valueOf(getSetPrice());
+        for (int i = 0; i < 6; i++) {
+            PrimePart part = getPrimePart(i);
+            set[4 + i] = (part != null) ? String.valueOf(part.getId()) : "null";
+        }
+        return set;
+    }
 }

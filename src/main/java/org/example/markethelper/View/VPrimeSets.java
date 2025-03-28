@@ -18,6 +18,7 @@ import org.example.markethelper.Model.BL.PrimeSet;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class VPrimeSets implements IView, PropertyChangeListener {
@@ -142,7 +143,15 @@ public class VPrimeSets implements IView, PropertyChangeListener {
         Button newSet = new Button("New Set");
         newSet.setOnAction(controller.generateEventHandlerAction("view-newSet",supplier));
         Button modifySet = new Button("Modify");
-        modifySet.setOnAction(controller.generateEventHandlerAction("modify-set",supplier));
+        modifySet.setOnAction(event -> {
+            PrimeSet select = setTable.getSelectionModel().getSelectedItem();
+            if (select != null) {
+                Supplier<String[]> supplierModify = select::toStringArray;
+                controller.generateEventHandlerAction("modify-set", supplierModify).handle(event);
+            } else {
+                System.out.println("No set selected to modify.");
+            }
+        });
         Button deleteSet = new Button("Delete");
         deleteSet.setOnAction(event -> {
             PrimeSet select = setTable.getSelectionModel().getSelectedItem();
@@ -150,7 +159,7 @@ public class VPrimeSets implements IView, PropertyChangeListener {
                 Supplier<String[]> supplierDelete = () -> new String[]{String.valueOf(select.getSetId())};
                 controller.generateEventHandlerAction("delete-set",supplierDelete).handle(event);
             } else {
-                System.out.println("No item selected for deletion.");
+                System.out.println("No set selected for deletion.");
             }
         });
         Button relics = new Button("Relics");

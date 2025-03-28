@@ -102,6 +102,9 @@ public class PrimaryModel implements IModel {
     public ArrayList<PrimePart> getAllPrimeParts() {
         return primePartDAO.getPrimeParts();
     }
+    public PrimePart getPrimePart(int id) {
+        return primePartDAO.getPrimePart(id);
+    }
 
     public void getAllRelics() {
         support.firePropertyChange("show-allRelics", null, relicDAO.getAllRelics());
@@ -440,6 +443,22 @@ public class PrimaryModel implements IModel {
     public void updateRiven(int id, String name, int price, String polarity, int rerolls) {
         Riven toUpdate = new Riven(id,name,price,polarity,rerolls);
         rivenDAO.updateRiven(toUpdate);
+    }
+
+    public void updatePrimeSet(int id, String name, int price, int part1, int part2, int part3, int part4, int part5, int part6) {
+        ArrayList<PrimePart> primeParts = new ArrayList<>();
+        addNotNullPart(primeParts,part1);
+        addNotNullPart(primeParts,part2);
+        addNotNullPart(primeParts,part3);
+        addNotNullPart(primeParts,part4);
+        addNotNullPart(primeParts,part5);
+        addNotNullPart(primeParts,part6);
+        PrimeSet toUpdate = new PrimeSet(id,name, primeParts, price);
+        primeSetDAO.updatePrimeSet(toUpdate);
+        primeSetDAO.deleteSetPartIntermediate(toUpdate.getSetId());
+        for (PrimePart part : primeParts) {
+            primeSetDAO.addPrimePartToSet(id, part);
+        }
     }
 
     private void addNotNullPart(ArrayList<PrimePart> primeParts, int id) {
