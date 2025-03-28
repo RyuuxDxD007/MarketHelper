@@ -11,14 +11,17 @@ public class Relic {
     final private int MAX_SILVER=2;
     final private int MAX_GOLD=1;
 
-
+    private int relicId;
+    private String relicName;
     private ArrayList<PrimePart> primeParts;
-    private int setPrice;
+    private int relicPrice;
     private int seperatedPrice;
 
-    public Relic(ArrayList<PrimePart> primeParts, int setPrice) {
+    public Relic(int relicId, String relicName, ArrayList<PrimePart> primeParts, int relicPrice) {
+        this.relicId=relicId;
+        this.relicName=relicName;
         this.primeParts = primeParts;
-        this.setPrice = setPrice;
+        this.relicPrice = relicPrice;
         computeSeperatedSet();
     }
     public PrimePart getPrimePart(int index) {
@@ -34,11 +37,10 @@ public class Relic {
             seperatedPrice = seperatedPrice + primeParts.get(i).getPrice();
         }
     }
-    public void setSetPrice(int setPrice) {
-        this.setPrice = setPrice;
-    }
-    public int getSetPrice() {
-        return setPrice;
+    public int getRelicId() {return relicId;}
+    public String getRelicName(){return relicName;}
+    public int getRelicPrice() {
+        return relicPrice;
     }
     public int getSeperatedPrice() {
         return seperatedPrice;
@@ -48,6 +50,7 @@ public class Relic {
         int bronze = findBronze();
         int silver = findSilver();
         int gold = findGold();
+
 
 
         if(primePart.getColor().equals(BRONZE)){
@@ -105,6 +108,18 @@ public class Relic {
             }
         }
         return gold;
+    }
+    public String[] toStringArray() {
+        String[] relic = new String[10];
+        relic[0] = "Relic";
+        relic[1] = String.valueOf(relicId);
+        relic[2] = relicName;
+        relic[3] = String.valueOf(relicPrice);
+        for (int i = 0; i < 6; i++) {
+            PrimePart part = getPrimePart(i);
+            relic[4 + i] = (part != null) ? String.valueOf(part.getId()) : "null";
+        }
+        return relic;
     }
 
 

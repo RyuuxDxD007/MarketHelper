@@ -11,9 +11,6 @@ public class Riven extends Mod{
     public int getRerolls() {
         return rerolls;
     }
-    public void setRerolls(int rerolls) {
-        this.rerolls = rerolls;
-    }
     @Override
     public String[] toStringArray() {
         return new String[] {"Riven",String.valueOf(getId()),getName(),String.valueOf(getPrice()),getPolarity(),String.valueOf(getRerolls())};

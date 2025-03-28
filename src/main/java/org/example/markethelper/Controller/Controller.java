@@ -167,6 +167,34 @@ public class Controller {
                 };
                 break;
 
+            //Relic Logics
+            case "show-allRelics":
+                t = x -> showAllRelics();
+                break;
+            case "modify-relic":
+                t = x -> {
+                    modify("view-modifyRelic", x );
+                };
+                break;
+            case "delete-relic":
+                t = x -> {
+                    deleteRelic(x[0]);
+                    showAllRelics();
+                };
+                break;
+            case "create-relic":
+                t = x -> {
+                    createRelic(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]);
+                    changeView("view-relics");
+                };
+                break;
+            case "update-relic":
+                t = x -> {
+                    updatePrimeRelic(x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8]);
+                    changeView("view-relics");
+                };
+                break;
+
 
             //User related and view change from user
             case "create-user":
@@ -231,6 +259,20 @@ public class Controller {
                 t = (x) -> checkPressedSet(action);
                 break;
 
+            //Select buttons changing bool for Sets
+            case "select-min-relic":
+                t = (x) -> checkPressedRelic(action);
+                break;
+            case "select-max-relic":
+                t = (x) -> checkPressedRelic(action);
+                break;
+            case "select-averageMin-relic":
+                t = (x) -> checkPressedRelic(action);
+                break;
+            case "select-averageMax-relic":
+                t = (x) -> checkPressedRelic(action);
+                break;
+
             //view changes
             case "view-newItem":
                 t = (x) -> changeView(action);
@@ -253,6 +295,9 @@ public class Controller {
             case "view-newSet":
                 t = (x) -> changeView(action);
                 break;
+            case "view-newRelic":
+                t = (x) -> changeView(action);
+                break;
             default:
                 throw new InvalidParameterException(action + " n'existe pas.");
         }
@@ -261,6 +306,11 @@ public class Controller {
 
     private void updatePrimeSet(String id, String name, String price, String part1, String part2, String part3, String part4, String part5, String part6) {
         this.model.updatePrimeSet(Integer.parseInt(id), name, Integer.parseInt(price), Integer.parseInt(part1), Integer.parseInt(part2),
+                Integer.parseInt(part3), Integer.parseInt(part4), Integer.parseInt(part5), Integer.parseInt(part6));
+    }
+
+    private void updatePrimeRelic(String id, String name, String price, String part1, String part2, String part3, String part4, String part5, String part6) {
+        this.model.updatePrimeRelic(Integer.parseInt(id), name, Integer.parseInt(price), Integer.parseInt(part1), Integer.parseInt(part2),
                 Integer.parseInt(part3), Integer.parseInt(part4), Integer.parseInt(part5), Integer.parseInt(part6));
     }
 
@@ -284,12 +334,21 @@ public class Controller {
         this.model.deleteSet(Integer.parseInt(id));
     }
 
+    private void deleteRelic(String id) {
+        this.model.deleteRelic(Integer.parseInt(id));
+    }
+
     private void deleteItem(String id) {
         this.model.deleteItem(Integer.parseInt(id));
     }
 
     private void createSet(String name, String price, String part1, String part2, String part3, String part4, String part5, String part6) {
         this.model.createSet(name, Integer.parseInt(price), Integer.parseInt(part1), Integer.parseInt(part2),
+                Integer.parseInt(part3), Integer.parseInt(part4), Integer.parseInt(part5), Integer.parseInt(part6));
+    }
+
+    private void createRelic(String name, String price, String part1, String part2, String part3, String part4, String part5, String part6) {
+        this.model.createRelic(name, Integer.parseInt(price), Integer.parseInt(part1), Integer.parseInt(part2),
                 Integer.parseInt(part3), Integer.parseInt(part4), Integer.parseInt(part5), Integer.parseInt(part6));
     }
 
@@ -363,6 +422,11 @@ public class Controller {
     public void checkPressedSet(String check) {
         this.model.boolChange(check);
         this.model.getFilteredSets();
+    }
+
+    public void checkPressedRelic(String check) {
+        this.model.boolChange(check);
+        this.model.getFilteredRelics();
     }
 
     public void minFieldChange(String min, String option) {
@@ -449,5 +513,17 @@ public class Controller {
         else {
             return null;
         }
+    }
+
+    public String getSetSeperatedPriceRelic(Relic relic) {
+        return this.model.getSeperatedRelic(relic);
+    }
+
+    public String getPrimePartNameRelic(Relic relic, int i) {
+        return this.model.getPrimePartNameRelic(relic,i);
+    }
+
+    public void showAllRelics() {
+        this.model.getFilteredRelics();
     }
 }

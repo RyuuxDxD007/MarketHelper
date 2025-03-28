@@ -21,6 +21,8 @@ public class FactoryIView {
                 return (IView) new VNewItem(app);
             case "view-newSet":
                 return (IView) new VNewSet(app);
+            case "view-newRelic":
+                return (IView) new VNewRelic(app);
             default :
                 throw new InvalidParameterException("unknown view : " + view);
         }
@@ -31,6 +33,8 @@ public class FactoryIView {
                 return (IView) new VNewItem(app, item);
             case "view-modifySet":
                 return (IView) new VNewSet(app, item);
+            case "view-modifyRelic":
+                return (IView) new VNewRelic(app, item);
             default :
                 throw new InvalidParameterException("unknown view : " + view);
         }

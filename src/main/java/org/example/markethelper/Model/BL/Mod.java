@@ -11,9 +11,6 @@ public class Mod extends Item{
     public String getPolarity(){
         return polarity;
     }
-    public void setPolarity(String polarity){
-        this.polarity = polarity;
-    }
 
     @Override
     public String[] toStringArray() {

@@ -12,7 +12,8 @@ public interface IRelicDAO {
     Relic getRelic(int id);
     boolean updateRelic(Relic relic);
     boolean deleteRelic(int id);
-    void deletePrimePartFromAllRelics(int primePartId);
+    boolean deletePrimePartFromAllRelics(int primePartId);
+    boolean deleteRelicPartIntermediate(int relicId);
     boolean addPrimePartToRelic(int relicID, PrimePart primePart);
     boolean deletePrimePartFromRelic(int relicID, PrimePart primePart);
     ArrayList<PrimePart> getPrimePartsForRelic(int relicID);

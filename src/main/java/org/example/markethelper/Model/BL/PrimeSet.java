@@ -36,21 +36,11 @@ public class PrimeSet {
                 return null;
             }
     }
-    public void setPrimePart(int index, PrimePart primePart) {
-        primeParts.set(index, primePart);
-    }
     public int getSetPrice() {
         return setPrice;
     }
-    public void setSetPrice(int setPrice) {
-        this.setPrice = setPrice;
-    }
     public int getSeperatedPrice() {
         return seperatedPrice;
-    }
-    public void addPart(PrimePart primePart) {
-    primeParts.add(primePart);
-    computeSeperatedSet();
     }
     public int getPrimePartsSize(){
         return primeParts.size();

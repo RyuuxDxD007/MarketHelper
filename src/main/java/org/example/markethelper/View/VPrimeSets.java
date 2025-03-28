@@ -2,7 +2,6 @@ package org.example.markethelper.View;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,13 +11,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.markethelper.Controller.Controller;
-import org.example.markethelper.Model.BL.Item;
 import org.example.markethelper.Model.BL.PrimeSet;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.function.Supplier;
 
 public class VPrimeSets implements IView, PropertyChangeListener {

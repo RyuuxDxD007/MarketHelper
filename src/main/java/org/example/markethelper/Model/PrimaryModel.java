@@ -102,12 +102,13 @@ public class PrimaryModel implements IModel {
     public ArrayList<PrimePart> getAllPrimeParts() {
         return primePartDAO.getPrimeParts();
     }
+
     public PrimePart getPrimePart(int id) {
         return primePartDAO.getPrimePart(id);
     }
 
-    public void getAllRelics() {
-        support.firePropertyChange("show-allRelics", null, relicDAO.getAllRelics());
+    public ArrayList<Relic> getAllRelics() {
+        return relicDAO.getAllRelics();
     }
 
     public boolean createUser(String id, String pass) {
@@ -161,40 +162,48 @@ public class PrimaryModel implements IModel {
     public ArrayList<Item> Filtring() {
         ArrayList<Item> filtered = new ArrayList<>();
         filtered = getAllItems();
-        for (int i = filtered.size() - 1; i >= 0; i--){
+        for (int i = filtered.size() - 1; i >= 0; i--) {
             if (minB) {
                 if (filtered.get(i).getPrice() <= minI) {
                     filtered.remove(i);
                 }
-            }if (maxB) {
+            }
+            if (maxB) {
                 if (filtered.get(i).getPrice() >= maxI) {
                     filtered.remove(i);
                 }
-            }if (averageMinB) {
+            }
+            if (averageMinB) {
                 if (filtered.get(i).getPrice() <= averageMinI) {
                     filtered.remove(i);
                 }
-            }if (averageMaxB) {
+            }
+            if (averageMaxB) {
                 if (filtered.get(i).getPrice() >= averageMaxI) {
                     filtered.remove(i);
                 }
-            }if (itemB) {
+            }
+            if (itemB) {
                 if (getItemType(filtered.get(i)).equals("Item")) {
                     filtered.remove(i);
                 }
-            }if (modB) {
+            }
+            if (modB) {
                 if (getItemType(filtered.get(i)).equals("Mod")) {
                     filtered.remove(i);
                 }
-            }if (rivenB) {
+            }
+            if (rivenB) {
                 if (getItemType(filtered.get(i)).equals("Riven")) {
                     filtered.remove(i);
                 }
-            }if (primeB) {
+            }
+            if (primeB) {
                 if (getItemType(filtered.get(i)).equals("PrimePart")) {
                     filtered.remove(i);
                 }
-            }if (rarityB) {
+            }
+            if (rarityB) {
                 if (getItemType(filtered.get(i)).equals("PrimePart")) {
                     PrimePart prime = (PrimePart) filtered.get(i);
                     if (prime.getRarity() != rarityI) {
@@ -210,7 +219,8 @@ public class PrimaryModel implements IModel {
     public void getFiltered() {
         support.firePropertyChange("show-allItems", null, Filtring());
     }
-    public void boolReset(){
+
+    public void boolReset() {
         minB = false;
         maxB = false;
         averageMinB = false;
@@ -293,36 +303,34 @@ public class PrimaryModel implements IModel {
         }
     }
 
-    public void updateRarityI(String rarity){
-        rarityI=Integer.parseInt(rarity);
+    public void updateRarityI(String rarity) {
+        rarityI = Integer.parseInt(rarity);
     }
 
     public void createItem(String name, int price) {
-        Item item = new Item(idDispenser.getNextID(), name,price);
+        Item item = new Item(idDispenser.getNextID(), name, price);
         itemDAO.addItem(item);
     }
 
     public void createMod(String name, int price, String polarity) {
-        Mod mod = new Mod(idDispenser.getNextID(), name,price,polarity);
+        Mod mod = new Mod(idDispenser.getNextID(), name, price, polarity);
         modDAO.addMod(mod);
     }
 
     public void createPrimePart(String name, int price, int rarity, String color) {
-        if(rarity==15){
+        if (rarity == 15) {
             color = "Bronze";
-        }
-        else if(rarity==45){
+        } else if (rarity == 45) {
             color = "Silver";
-        }
-        else if(rarity==100){
+        } else if (rarity == 100) {
             color = "Gold";
         }
-        PrimePart prime = new PrimePart(idDispenser.getNextID(), name,price,rarity,color);
+        PrimePart prime = new PrimePart(idDispenser.getNextID(), name, price, rarity, color);
         primePartDAO.addPrimePart(prime);
     }
 
     public void createRiven(String name, int price, String polarity, int reroll) {
-        Riven riven = new Riven(idDispenser.getNextID(), name,price,polarity,reroll);
+        Riven riven = new Riven(idDispenser.getNextID(), name, price, polarity, reroll);
         rivenDAO.addRiven(riven);
     }
 
@@ -331,10 +339,9 @@ public class PrimaryModel implements IModel {
     }
 
     public String getPrimePartName(PrimeSet set, int i) {
-        if(i<set.getPrimePartsSize()) {
+        if (i < set.getPrimePartsSize()) {
             return set.getPrimePart(i).getName();
-        }
-        else {
+        } else {
             return "--";
         }
     }
@@ -342,23 +349,27 @@ public class PrimaryModel implements IModel {
     public void getFilteredSets() {
         support.firePropertyChange("show-allSets", null, SetFiltring());
     }
+
     public ArrayList<PrimeSet> SetFiltring() {
         ArrayList<PrimeSet> filtered = new ArrayList<>();
         filtered = getAllPrimeSets();
-        for (int i = filtered.size() - 1; i >= 0; i--){
+        for (int i = filtered.size() - 1; i >= 0; i--) {
             if (minB) {
                 if (filtered.get(i).getSetPrice() <= minI) {
                     filtered.remove(i);
                 }
-            }if (maxB) {
+            }
+            if (maxB) {
                 if (filtered.get(i).getSetPrice() >= maxI) {
                     filtered.remove(i);
                 }
-            }if (averageMinB) {
+            }
+            if (averageMinB) {
                 if (filtered.get(i).getSetPrice() <= averageMinI) {
                     filtered.remove(i);
                 }
-            }if (averageMaxB) {
+            }
+            if (averageMaxB) {
                 if (filtered.get(i).getSetPrice() >= averageMaxI) {
                     filtered.remove(i);
                 }
@@ -371,12 +382,12 @@ public class PrimaryModel implements IModel {
     public void createSet(String name, int price, int part1, int part2, int part3, int part4, int part5, int part6) {
         int setId = idDispenser.getNextID();
         ArrayList<PrimePart> primeParts = new ArrayList<>();
-        addNotNullPart(primeParts,part1);
-        addNotNullPart(primeParts,part2);
-        addNotNullPart(primeParts,part3);
-        addNotNullPart(primeParts,part4);
-        addNotNullPart(primeParts,part5);
-        addNotNullPart(primeParts,part6);
+        addNotNullPart(primeParts, part1);
+        addNotNullPart(primeParts, part2);
+        addNotNullPart(primeParts, part3);
+        addNotNullPart(primeParts, part4);
+        addNotNullPart(primeParts, part5);
+        addNotNullPart(primeParts, part6);
 
         PrimeSet set = new PrimeSet(setId, name, primeParts, price);
         primeSetDAO.addPrimeSet(set);
@@ -393,28 +404,25 @@ public class PrimaryModel implements IModel {
                 toDelete = item;
             }
         }
-        if(toDelete instanceof PrimePart) {
+        if (toDelete instanceof PrimePart) {
             ArrayList<PrimeSet> sets = getAllPrimeSets();
             for (PrimeSet set : sets) {
-                for(PrimePart part : set.getPrimeParts()){
-                    if(part.getId() == toDelete.getId()){
+                for (PrimePart part : set.getPrimeParts()) {
+                    if (part.getId() == toDelete.getId()) {
                         deleteSet(set.getSetId());
                     }
                 }
             }
             primePartDAO.deletePrimePart(id);
 
-        }
-        else if(toDelete instanceof Riven) {
+        } else if (toDelete instanceof Riven) {
             rivenDAO.deleteRiven(id);
-        }
-        else if(toDelete instanceof Mod) {
+        } else if (toDelete instanceof Mod) {
             modDAO.deleteMod(id);
-        }
-        else {
+        } else {
             itemDAO.deleteItem(id);
         }
-        if(toDelete!=null) {
+        if (toDelete != null) {
             idDispenser.deleteID(toDelete.getId());
         }
     }
@@ -431,34 +439,116 @@ public class PrimaryModel implements IModel {
     }
 
     public void updateMod(int id, String name, int price, String polarity) {
-        Mod toUpdate = new Mod(id,name,price,polarity);
+        Mod toUpdate = new Mod(id, name, price, polarity);
         modDAO.updateMod(toUpdate);
     }
 
     public void updatePrimePart(int id, String name, int price, int rarity, String color) {
-        PrimePart toUpdate = new PrimePart(id,name,price,rarity,color);
+        PrimePart toUpdate = new PrimePart(id, name, price, rarity, color);
         primePartDAO.updatePrimePart(toUpdate);
     }
 
     public void updateRiven(int id, String name, int price, String polarity, int rerolls) {
-        Riven toUpdate = new Riven(id,name,price,polarity,rerolls);
+        Riven toUpdate = new Riven(id, name, price, polarity, rerolls);
         rivenDAO.updateRiven(toUpdate);
     }
 
     public void updatePrimeSet(int id, String name, int price, int part1, int part2, int part3, int part4, int part5, int part6) {
         ArrayList<PrimePart> primeParts = new ArrayList<>();
-        addNotNullPart(primeParts,part1);
-        addNotNullPart(primeParts,part2);
-        addNotNullPart(primeParts,part3);
-        addNotNullPart(primeParts,part4);
-        addNotNullPart(primeParts,part5);
-        addNotNullPart(primeParts,part6);
-        PrimeSet toUpdate = new PrimeSet(id,name, primeParts, price);
+        addNotNullPart(primeParts, part1);
+        addNotNullPart(primeParts, part2);
+        addNotNullPart(primeParts, part3);
+        addNotNullPart(primeParts, part4);
+        addNotNullPart(primeParts, part5);
+        addNotNullPart(primeParts, part6);
+        PrimeSet toUpdate = new PrimeSet(id, name, primeParts, price);
         primeSetDAO.updatePrimeSet(toUpdate);
         primeSetDAO.deleteSetPartIntermediate(toUpdate.getSetId());
         for (PrimePart part : primeParts) {
             primeSetDAO.addPrimePartToSet(id, part);
         }
+    }
+
+    public void updatePrimeRelic(int id, String name, int price, int part1, int part2, int part3, int part4, int part5, int part6) {
+        ArrayList<PrimePart> primeParts = new ArrayList<>();
+        primeParts.add(primePartDAO.getPrimePart(part1));
+        primeParts.add(primePartDAO.getPrimePart(part2));
+        primeParts.add(primePartDAO.getPrimePart(part3));
+        primeParts.add(primePartDAO.getPrimePart(part4));
+        primeParts.add(primePartDAO.getPrimePart(part5));
+        primeParts.add(primePartDAO.getPrimePart(part6));
+        Relic toUpdate = new Relic(id, name, primeParts, price);
+        relicDAO.updateRelic(toUpdate);
+        relicDAO.deleteRelicPartIntermediate(toUpdate.getRelicId());
+        for (PrimePart part : primeParts) {
+            relicDAO.addPrimePartToRelic(id, part);
+        }
+
+    }
+
+    public void deleteRelic(int id) {
+        relicDAO.deleteRelicPartIntermediate(id);
+        relicDAO.deleteRelic(id);
+        idDispenser.deleteID(id);
+    }
+
+    public void createRelic(String name, int price, int part1, int part2, int part3, int part4, int part5, int part6) {
+        int id = idDispenser.getNextID();
+        ArrayList<PrimePart> primeParts = new ArrayList<>();
+        primeParts.add(primePartDAO.getPrimePart(part1));
+        primeParts.add(primePartDAO.getPrimePart(part2));
+        primeParts.add(primePartDAO.getPrimePart(part3));
+        primeParts.add(primePartDAO.getPrimePart(part4));
+        primeParts.add(primePartDAO.getPrimePart(part5));
+        primeParts.add(primePartDAO.getPrimePart(part6));
+        Relic relic = new Relic(id, name, primeParts, price);
+        relicDAO.addRelic(relic);
+        for (PrimePart part : primeParts) {
+            relicDAO.addPrimePartToRelic(id, part);
+        }
+    }
+
+    public void getFilteredRelics() {
+        support.firePropertyChange("show-allRelics", null, relicFiltring());
+    }
+
+
+    public ArrayList<Relic> relicFiltring() {
+        ArrayList<Relic> filtered = new ArrayList<>();
+        filtered = getAllRelics(); // Replace with the method to fetch all relics
+        for (int i = filtered.size() - 1; i >= 0; i--) {
+            if (minB) {
+                if (filtered.get(i).getRelicPrice() <= minI) { // Adjusted method name to match Relic
+                    filtered.remove(i);
+                }
+            }
+            if (maxB) {
+                if (filtered.get(i).getRelicPrice() >= maxI) { // Adjusted method name to match Relic
+                    filtered.remove(i);
+                }
+            }
+            if (averageMinB) {
+                if (filtered.get(i).getRelicPrice() <= averageMinI) { // Adjusted method name to match Relic
+                    filtered.remove(i);
+                }
+            }
+            if (averageMaxB) {
+                if (filtered.get(i).getRelicPrice() >= averageMaxI) { // Adjusted method name to match Relic
+                    filtered.remove(i);
+                }
+            }
+        }
+
+        return filtered;
+    }
+
+
+    public String getPrimePartNameRelic(Relic relic, int i) {
+        return relic.getPrimePart(i).getName();
+    }
+
+    public String getSeperatedRelic(Relic relic) {
+        return String.valueOf(relic.getSeperatedPrice());
     }
 
     private void addNotNullPart(ArrayList<PrimePart> primeParts, int id) {
@@ -467,10 +557,11 @@ public class PrimaryModel implements IModel {
             primeParts.add(part);
         }
     }
+
     private void loadIds() {
         ArrayList<PrimeSet> sets = getAllPrimeSets();
         ArrayList<Item> items = getAllItems();
-        for(PrimeSet set : sets) {
+        for (PrimeSet set : sets) {
             usedIDs.add(set.getSetId());
         }
         for (Item item : items) {

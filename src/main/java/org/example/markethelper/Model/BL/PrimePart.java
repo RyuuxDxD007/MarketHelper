@@ -13,14 +13,11 @@ public class PrimePart extends Item{
     public int getRarity() {
         return rarity;
     }
-    public void setRarity(int rarity) {
-        this.rarity = rarity;
-    }
     public String getColor() {
         return color;
     }
-    public void setColor(String color) {
-        this.color = color;
+    public double ratio() {
+        return (double)rarity / (double)getPrice();
     }
     @Override
     public String[] toStringArray() {

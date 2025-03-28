@@ -3,6 +3,7 @@ package org.example.markethelper.Model;
 import org.example.markethelper.Model.BL.Item;
 import org.example.markethelper.Model.BL.PrimePart;
 import org.example.markethelper.Model.BL.PrimeSet;
+import org.example.markethelper.Model.BL.Relic;
 
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -42,4 +43,16 @@ public interface IModel {
     void updatePrimePart(int id, String name, int price, int rarity, String color);
     void updateRiven(int id, String name, int price, String polarity, int rerolls);
     void updatePrimeSet(int id, String name, int price, int part1, int part2, int part3, int part4, int part5, int part6);
+
+    void updatePrimeRelic(int id, String name, int price, int part1, int part2, int part3, int part4, int part5, int part6);
+
+    void deleteRelic(int id);
+
+    void createRelic(String name, int price, int part1, int part2, int part3, int part4, int part5, int part6);
+
+    void getFilteredRelics();
+
+    String getPrimePartNameRelic(Relic relic, int i);
+
+    String getSeperatedRelic(Relic relic);
 }
