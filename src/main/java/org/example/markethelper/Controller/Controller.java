@@ -81,13 +81,14 @@ public class Controller {
                 break;
             case "modify-item":
                 t = x -> {
-                    changeView("view-newItem");
-                    //showItem(selected);
+                    modify("view-modifyItem", x );
                 };
                 break;
-            //need fix
             case "delete-item":
-                t = x -> showAllItems();
+                t = x -> {
+                    deleteItem(x[0]);
+                    showAllItems();
+                };
                 break;
             case "create-item":
                 t = x -> {
@@ -95,7 +96,6 @@ public class Controller {
                     changeView("view-mainPage");
                 };
                 break;
-
             case "create-mod":
                 t = x -> {
                     createMod(x[0], x[1], x[2]);
@@ -114,6 +114,30 @@ public class Controller {
                     changeView("view-mainPage");
                 };
                 break;
+            case "update-item":
+                t = x -> {
+                    updateItem(x[0], x[1], x[2]);
+                    changeView("view-mainPage");
+                };
+                break;
+            case "update-mod":
+                t = x -> {
+                    updateMod(x[0], x[1], x[2], x[3]);
+                    changeView("view-mainPage");
+                };
+                break;
+            case "update-primePart":
+                t = x -> {
+                    updatePrimePart(x[0], x[1], x[2], x[3], x[4]);
+                    changeView("view-mainPage");
+                };
+                break;
+            case "update-riven":
+                t = x -> {
+                    updateRiven(x[0], x[1], x[2], x[3], x[4]);
+                    changeView("view-mainPage");
+                };
+                break;
 
             //Set Logics
             case "show-allSets":
@@ -125,9 +149,11 @@ public class Controller {
                     //showSet(selected);
                 };
                 break;
-            //need fix
             case "delete-set":
-                t = x -> showAllSets();
+                t = x -> {
+                    deleteSet(x[0]);
+                    showAllSets();
+                };
                 break;
             case "create-set":
                 t = x -> {
@@ -228,6 +254,30 @@ public class Controller {
         return t;
     }
 
+    private void updateRiven(String id, String name, String price, String polarity, String rerolls) {
+        this.model.updateRiven(Integer.parseInt(id), name, Integer.parseInt(price), polarity, Integer.parseInt(rerolls));
+    }
+
+    private void updatePrimePart(String id, String name, String price, String rarity, String color) {
+        this.model.updatePrimePart(Integer.parseInt(id), name, Integer.parseInt(price), Integer.parseInt(rarity), color);
+    }
+
+    private void updateMod(String id, String name, String price, String polarity) {
+        this.model.updateMod(Integer.parseInt(id), name, Integer.parseInt(price), polarity);
+    }
+
+    private void updateItem(String id, String name, String price) {
+        this.model.updateItem(Integer.parseInt(id), name, Integer.parseInt(price));
+    }
+
+    private void deleteSet(String id) {
+        this.model.deleteSet(Integer.parseInt(id));
+    }
+
+    private void deleteItem(String id) {
+        this.model.deleteItem(Integer.parseInt(id));
+    }
+
     private void createSet(String name, String price, String part1, String part2, String part3, String part4, String part5, String part6) {
         this.model.createSet(name, Integer.parseInt(price), Integer.parseInt(part1), Integer.parseInt(part2), Integer.parseInt(part3), Integer.parseInt(part4), Integer.parseInt(part5), Integer.parseInt(part6));
     }
@@ -239,6 +289,18 @@ public class Controller {
     public void changeView(String view) {
         this.model.boolReset();
         IView newView = FactoryIView.createView(view, this.view);
+        newView.setController(this.view.getController());
+        if (newView instanceof PropertyChangeListener) {
+            if (this.view instanceof PropertyChangeListener) {
+                this.model.removePropertyChangeListener((PropertyChangeListener) this.view);
+            }
+            this.model.addPropertyChangeListener((PropertyChangeListener) newView);
+        }
+        this.view = newView;
+        this.view.showPrincipalWindow();
+    }
+    public void modify(String view, String[] item) {
+        IView newView = FactoryIView.createView(view, this.view, item);
         newView.setController(this.view.getController());
         if (newView instanceof PropertyChangeListener) {
             if (this.view instanceof PropertyChangeListener) {

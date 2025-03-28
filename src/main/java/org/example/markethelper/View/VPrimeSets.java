@@ -12,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.markethelper.Controller.Controller;
+import org.example.markethelper.Model.BL.Item;
 import org.example.markethelper.Model.BL.PrimeSet;
 
 import java.beans.PropertyChangeEvent;
@@ -143,7 +144,15 @@ public class VPrimeSets implements IView, PropertyChangeListener {
         Button modifySet = new Button("Modify");
         modifySet.setOnAction(controller.generateEventHandlerAction("modify-set",supplier));
         Button deleteSet = new Button("Delete");
-        deleteSet.setOnAction(controller.generateEventHandlerAction("delete-set",supplier));
+        deleteSet.setOnAction(event -> {
+            PrimeSet select = setTable.getSelectionModel().getSelectedItem();
+            if (select != null) {
+                Supplier<String[]> supplierDelete = () -> new String[]{String.valueOf(select.getSetId())};
+                controller.generateEventHandlerAction("delete-set",supplierDelete).handle(event);
+            } else {
+                System.out.println("No item selected for deletion.");
+            }
+        });
         Button relics = new Button("Relics");
         relics.setOnAction(controller.generateEventHandlerAction("view-relics",supplier));
         Button Items = new Button("Items");

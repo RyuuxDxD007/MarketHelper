@@ -15,4 +15,9 @@ public class Mod extends Item{
         this.polarity = polarity;
     }
 
+    @Override
+    public String[] toStringArray() {
+        return new String[] {"Mod",String.valueOf(getId()),getName(),String.valueOf(getPrice()),getPolarity()};
+    }
+
 }

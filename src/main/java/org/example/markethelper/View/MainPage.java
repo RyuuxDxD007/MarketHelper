@@ -153,9 +153,25 @@ public class MainPage implements PropertyChangeListener, IView{
         Button newItem = new Button("New Item");
         newItem.setOnAction(controller.generateEventHandlerAction("view-newItem",supplier));
         Button modifyItem = new Button("Modify");
-        modifyItem.setOnAction(controller.generateEventHandlerAction("modify-item",supplier));
+        modifyItem.setOnAction(event -> {
+            Item select = itemTable.getSelectionModel().getSelectedItem();
+            if (select != null) {
+                Supplier<String[]> supplierModify = select::toStringArray;
+                controller.generateEventHandlerAction("modify-item", supplierModify).handle(event);
+            } else {
+                System.out.println("No item selected to modify.");
+            }
+        });
         Button deleteItem = new Button("Delete");
-        deleteItem.setOnAction(controller.generateEventHandlerAction("delete-item",supplier));
+        deleteItem.setOnAction(event -> {
+            Item select = itemTable.getSelectionModel().getSelectedItem();
+            if (select != null) {
+                Supplier<String[]> supplierDelete = () -> new String[]{String.valueOf(select.getId())};
+                controller.generateEventHandlerAction("delete-item",supplierDelete).handle(event);
+            } else {
+                System.out.println("No item selected for deletion.");
+            }
+        });
         Button relics = new Button("Relics");
         relics.setOnAction(controller.generateEventHandlerAction("view-relics",supplier));
         Button primeSet = new Button("Prime Set");

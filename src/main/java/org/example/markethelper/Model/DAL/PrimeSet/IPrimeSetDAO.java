@@ -13,8 +13,9 @@ public interface IPrimeSetDAO {
     boolean updatePrimeSet(PrimeSet set);
     boolean deletePrimeSet(int id);
     void deletePrimePartFromAllSets(int primePartId);
-    boolean addPrimePartToSet(int primeSetID, PrimePart primePart);
+    void addPrimePartToSet(int primeSetID, PrimePart primePart);
     boolean deletePrimePartFromSet(int primeSetID, PrimePart primePart);
     ArrayList<PrimePart> getPrimePartsForSet(int primeSetID);
     boolean close();
+    void deleteSetPartIntermediate(int id);
 }

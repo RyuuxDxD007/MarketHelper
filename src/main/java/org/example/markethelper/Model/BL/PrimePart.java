@@ -22,5 +22,9 @@ public class PrimePart extends Item{
     public void setColor(String color) {
         this.color = color;
     }
+    @Override
+    public String[] toStringArray() {
+        return new String[] {"PrimePart",String.valueOf(getId()),getName(),String.valueOf(getPrice()),String.valueOf(getRarity()),getColor()};
+    }
 
 }

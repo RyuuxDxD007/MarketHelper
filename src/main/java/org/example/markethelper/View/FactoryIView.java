@@ -25,4 +25,14 @@ public class FactoryIView {
                 throw new InvalidParameterException("unknown view : " + view);
         }
     }
+    public static IView createView(String view, IView app, String[] item) {
+        switch (view) {
+            case "view-modifyItem":
+                return (IView) new VNewItem(app, item);
+            case "view-newSet":
+                return (IView) new VNewSet(app);
+            default :
+                throw new InvalidParameterException("unknown view : " + view);
+        }
+    }
 }

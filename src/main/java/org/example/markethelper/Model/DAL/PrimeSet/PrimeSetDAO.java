@@ -17,6 +17,7 @@ public class PrimeSetDAO implements IPrimeSetDAO {  // Implementing the IPrimeSe
     PreparedStatement deletePrimePartFromSet;
     PreparedStatement deletePartFromAll;
     PreparedStatement getPrimePartsForSet;
+    PreparedStatement deleteSetPartIntermediate;
 
     public PrimeSetDAO(Connection con) {
         try {
@@ -38,6 +39,7 @@ public class PrimeSetDAO implements IPrimeSetDAO {  // Implementing the IPrimeSe
             this.addPrimePartToSet = this.con.prepareStatement("INSERT INTO PrimeSetPrimePart (primeSetID, primePartID) VALUES (?, ?)");
             this.deletePrimePartFromSet = this.con.prepareStatement("DELETE FROM PrimeSetPrimePart WHERE primeSetID = ? AND primePartID = ?");
             this.deletePartFromAll = this.con.prepareStatement("DELETE FROM PrimeSetPrimePart WHERE primePartId = ?");
+            this.deleteSetPartIntermediate = this.con.prepareStatement("DELETE FROM PrimeSetPrimePart WHERE primeSetID = ?");
             this.getPrimePartsForSet = this.con.prepareStatement("SELECT pp.* FROM PrimePart pp JOIN PrimeSetPrimePart psp ON pp.id = psp.primePartID WHERE psp.primeSetID = ?");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -133,17 +135,24 @@ public class PrimeSetDAO implements IPrimeSetDAO {  // Implementing the IPrimeSe
             System.out.println(e.getMessage());
         }
     }
+    @Override
+    public void deleteSetPartIntermediate(int primeSetId) {
+        try {
+            this.deleteSetPartIntermediate.setInt(1, primeSetId);
+            this.deleteSetPartIntermediate.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     @Override
-    public boolean addPrimePartToSet(int primeSetID, PrimePart primePart) {
+    public void addPrimePartToSet(int primeSetID, PrimePart primePart) {
         try {
             this.addPrimePartToSet.setInt(1, primeSetID);
             this.addPrimePartToSet.setInt(2, primePart.getId());
             this.addPrimePartToSet.executeUpdate();
-            return true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return false;
         }
     }
 

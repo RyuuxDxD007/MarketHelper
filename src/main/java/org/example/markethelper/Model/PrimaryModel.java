@@ -48,9 +48,9 @@ public class PrimaryModel implements IModel {
     private int averageMaxI;
     private int rarityI;
 
-    private int totalSizeItems;
-    private int totalSizeSets;
     final private int ERROR_CODE = -1;
+    ArrayList<Integer> usedIDs = new ArrayList<>();
+    IdDispenser idDispenser;
 
 
     public PrimaryModel() {
@@ -67,6 +67,8 @@ public class PrimaryModel implements IModel {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        loadIds();
+        idDispenser = new IdDispenser(usedIDs);
     }
 
     @Override
@@ -90,15 +92,11 @@ public class PrimaryModel implements IModel {
         all.addAll(mods);
         all.addAll(rivens);
         all.addAll(primeparts);
-        totalSizeItems = all.size();
         return all;
     }
 
     public ArrayList<PrimeSet> getAllPrimeSets() {
-        ArrayList<PrimeSet> all = new ArrayList<>();
-        all = primeSetDAO.getAllPrimeSets();
-        totalSizeSets = all.size();
-        return all;
+        return primeSetDAO.getAllPrimeSets();
     }
 
     public ArrayList<PrimePart> getAllPrimeParts() {
@@ -297,12 +295,12 @@ public class PrimaryModel implements IModel {
     }
 
     public void createItem(String name, int price) {
-        Item item = new Item(totalSizeItems+1,name,price);
+        Item item = new Item(idDispenser.getNextID(), name,price);
         itemDAO.addItem(item);
     }
 
     public void createMod(String name, int price, String polarity) {
-        Mod mod = new Mod(totalSizeItems+1,name,price,polarity);
+        Mod mod = new Mod(idDispenser.getNextID(), name,price,polarity);
         modDAO.addMod(mod);
     }
 
@@ -316,12 +314,12 @@ public class PrimaryModel implements IModel {
         else if(rarity==100){
             color = "Gold";
         }
-        PrimePart prime = new PrimePart(totalSizeItems+1,name,price,rarity,color);
+        PrimePart prime = new PrimePart(idDispenser.getNextID(), name,price,rarity,color);
         primePartDAO.addPrimePart(prime);
     }
 
     public void createRiven(String name, int price, String polarity, int reroll) {
-        Riven riven = new Riven(totalSizeItems+1,name,price,polarity,reroll);
+        Riven riven = new Riven(idDispenser.getNextID(), name,price,polarity,reroll);
         rivenDAO.addRiven(riven);
     }
 
@@ -368,7 +366,7 @@ public class PrimaryModel implements IModel {
     }
 
     public void createSet(String name, int price, int part1, int part2, int part3, int part4, int part5, int part6) {
-
+        int setId = idDispenser.getNextID();
         ArrayList<PrimePart> primeParts = new ArrayList<>();
         addNotNullPart(primeParts,part1);
         addNotNullPart(primeParts,part2);
@@ -377,17 +375,87 @@ public class PrimaryModel implements IModel {
         addNotNullPart(primeParts,part5);
         addNotNullPart(primeParts,part6);
 
-        PrimeSet set = new PrimeSet(totalSizeSets+1,name, primeParts, price);
+        PrimeSet set = new PrimeSet(setId, name, primeParts, price);
         primeSetDAO.addPrimeSet(set);
         for (PrimePart part : primeParts) {
-            primeSetDAO.addPrimePartToSet(totalSizeSets+1, part);
+            primeSetDAO.addPrimePartToSet(setId, part);
         }
+    }
+
+    public void deleteItem(int id) {
+        ArrayList<Item> all = getAllItems();
+        Item toDelete = null;
+        for (Item item : all) {
+            if (item.getId() == id) {
+                toDelete = item;
+            }
+        }
+        if(toDelete instanceof PrimePart) {
+            ArrayList<PrimeSet> sets = getAllPrimeSets();
+            for (PrimeSet set : sets) {
+                for(PrimePart part : set.getPrimeParts()){
+                    if(part.getId() == toDelete.getId()){
+                        deleteSet(set.getSetId());
+                    }
+                }
+            }
+            primePartDAO.deletePrimePart(id);
+
+        }
+        else if(toDelete instanceof Riven) {
+            rivenDAO.deleteRiven(id);
+        }
+        else if(toDelete instanceof Mod) {
+            modDAO.deleteMod(id);
+        }
+        else {
+            itemDAO.deleteItem(id);
+        }
+        if(toDelete!=null) {
+            idDispenser.deleteID(toDelete.getId());
+        }
+    }
+
+    public void deleteSet(int id) {
+        primeSetDAO.deleteSetPartIntermediate(id);
+        primeSetDAO.deletePrimeSet(id);
+        idDispenser.deleteID(id);
+    }
+
+    public void updateItem(int id, String name, int price) {
+        Item toUpdate = new Item(id, name, price);
+        itemDAO.updateItem(toUpdate);
+    }
+
+    public void updateMod(int id, String name, int price, String polarity) {
+        Mod toUpdate = new Mod(id,name,price,polarity);
+        modDAO.updateMod(toUpdate);
+    }
+
+    public void updatePrimePart(int id, String name, int price, int rarity, String color) {
+        PrimePart toUpdate = new PrimePart(id,name,price,rarity,color);
+        primePartDAO.updatePrimePart(toUpdate);
+    }
+
+    public void updateRiven(int id, String name, int price, String polarity, int rerolls) {
+        Riven toUpdate = new Riven(id,name,price,polarity,rerolls);
+        rivenDAO.updateRiven(toUpdate);
     }
 
     private void addNotNullPart(ArrayList<PrimePart> primeParts, int id) {
         if (id != ERROR_CODE) {
             PrimePart part = primePartDAO.getPrimePart(id);
             primeParts.add(part);
+        }
+    }
+    private void loadIds() {
+        ArrayList<PrimeSet> sets = getAllPrimeSets();
+        ArrayList<Item> items = getAllItems();
+        for(PrimeSet set : sets) {
+            usedIDs.add(set.getSetId());
+        }
+        for (Item item : items) {
+            usedIDs.add(item.getId());
         }
     }
 

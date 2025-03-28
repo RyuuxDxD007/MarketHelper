@@ -34,4 +34,10 @@ public interface IModel {
     void boolReset();
     ArrayList<PrimePart> getAllPrimeParts();
     void createSet(String name, int price, int part1, int part2, int part3, int part4, int part5, int part6);
+    void deleteItem(int i);
+    void deleteSet(int i);
+    void updateItem(int id, String name, int price);
+    void updateMod(int id, String name, int price, String polarity);
+    void updatePrimePart(int id, String name, int price, int rarity, String color);
+    void updateRiven(int id, String name, int price, String polarity, int rerolls);
 }

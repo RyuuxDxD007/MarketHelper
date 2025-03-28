@@ -30,4 +30,8 @@ public class Item {
         this.price = price;
     }
 
+
+    public String[] toStringArray() {
+        return new String[] {"Item",String.valueOf(id),name,String.valueOf(price)};
+    }
 }

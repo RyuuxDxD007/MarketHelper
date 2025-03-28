@@ -27,6 +27,8 @@ public class PrimeSet {
 
     public String getSetName() {return setName;}
 
+    public ArrayList<PrimePart> getPrimeParts() {return primeParts;}
+
     public PrimePart getPrimePart(int index) {
             if (index >= 0 && index < primeParts.size()) {
                 return primeParts.get(index);
