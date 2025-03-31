@@ -4,23 +4,24 @@ import java.util.ArrayList;
 
 public class Relic {
 
-    final private String BRONZE="bronze";
-    final private String SILVER="silver";
-    final private String GOLD="gold";
+    final private String BRONZE="Bronze";
+    final private String SILVER="Silver";
+    final private String GOLD="Gold";
     final private int MAX_BRONZE=3;
     final private int MAX_SILVER=2;
     final private int MAX_GOLD=1;
+    final private int QUANITY_PARTS=6;
 
     private int relicId;
     private String relicName;
-    private ArrayList<PrimePart> primeParts;
+    private ArrayList<PrimePart> primeParts = new ArrayList<>();
     private int relicPrice;
     private int seperatedPrice;
 
     public Relic(int relicId, String relicName, ArrayList<PrimePart> primeParts, int relicPrice) {
         this.relicId=relicId;
         this.relicName=relicName;
-        this.primeParts = primeParts;
+        AddPrimeParts(primeParts);
         this.relicPrice = relicPrice;
         computeSeperatedSet();
     }
@@ -45,65 +46,71 @@ public class Relic {
     public int getSeperatedPrice() {
         return seperatedPrice;
     }
-    public void AddPrimePart(PrimePart primePart) {
+    public void AddPrimeParts(ArrayList<PrimePart> parts) {
 
-        int bronze = findBronze();
-        int silver = findSilver();
-        int gold = findGold();
+        int bronze = findBronze(parts);
+        int silver = findSilver(parts);
+        int gold = findGold(parts);
 
+        //to ensure it's not adding more parts than it should
+        bronze = bronze + findBronze(primeParts);
+        silver = silver + findSilver(primeParts);
+        gold = gold + findGold(primeParts);
 
+        for(PrimePart primePart : parts) {
 
-        if(primePart.getColor().equals(BRONZE)){
-            if(bronze<MAX_BRONZE){
-                primeParts.add(primePart);
+            if (primePart.getColor().equals(BRONZE)) {
+                if (bronze <= MAX_BRONZE) {
+                    primeParts.add(primePart);
+                } else {
+                    throw new IllegalArgumentException("Cannot add more PrimeParts of this rarity.(Bronze)");
+                }
+
+            } else if (primePart.getColor().equals(SILVER)) {
+                if (silver <= MAX_SILVER) {
+                    primeParts.add(primePart);
+                } else {
+                    throw new IllegalArgumentException("Cannot add more PrimeParts of this rarity.(Silver)");
+                }
+
+            } else if (primePart.getColor().equals(GOLD)) {
+                if (gold <= MAX_GOLD) {
+                    primeParts.add(primePart);
+                } else {
+                    throw new IllegalArgumentException("Cannot add more PrimeParts of this rarity.(Gold)");
+                }
+
             }
-            else {
-                throw new IllegalArgumentException("Cannot add more PrimeParts of this rarity.");
-            }
-
         }
-        else if(primePart.getColor().equals(SILVER)){
-            if(silver<MAX_SILVER){
-                primeParts.add(primePart);
-            }
-            else {
-                throw new IllegalArgumentException("Cannot add more PrimeParts of this rarity.");
-            }
-
+        //if the number of parts is not the one wanted delete the added parts.
+        if(primeParts.size()<QUANITY_PARTS){
+            primeParts=null;
         }
-        else if(primePart.getColor().equals(GOLD)){
-            if(gold<MAX_GOLD){
-                primeParts.add(primePart);
-            }
-            else {
-                throw new IllegalArgumentException("Cannot add more PrimeParts of this rarity.");
-            }
 
-        }
-        computeSeperatedSet();
+
     }
-    public int findBronze(){
+    public int findBronze(ArrayList<PrimePart> parts){
         int bronze = 0;
-        for(int i = 0; i < primeParts.size(); i++){
-            if(primeParts.get(i).getColor().equals(BRONZE)){
+        for(int i = 0; i < parts.size(); i++){
+            if(parts.get(i).getColor().equals(BRONZE)){
                 bronze++;
             }
         }
         return bronze;
     }
-    public int findSilver(){
+    public int findSilver(ArrayList<PrimePart> parts){
         int silver = 0;
-        for(int i = 0; i < primeParts.size(); i++){
-            if(primeParts.get(i).getColor().equals(SILVER)){
+        for(int i = 0; i < parts.size(); i++){
+            if(parts.get(i).getColor().equals(SILVER)){
                 silver++;
             }
         }
         return silver;
     }
-    public int findGold(){
+    public int findGold(ArrayList<PrimePart> parts){
         int gold = 0;
-        for(int i = 0; i < primeParts.size(); i++){
-            if(primeParts.get(i).getColor().equals(GOLD)){
+        for(int i = 0; i < parts.size(); i++){
+            if(parts.get(i).getColor().equals(GOLD)){
                 gold++;
             }
         }

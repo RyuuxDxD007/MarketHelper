@@ -18,7 +18,7 @@ public class IdDispenser {
     }
 
     public int getNextID() {
-        for (int i = 1; i <= lastGeneratedID + 1; i++) {
+        for (int i = 1; i <= lastGeneratedID; i++) {
             if (!usedIDs.contains(i)) {
                 usedIDs.add(i);
                 return i;
@@ -35,6 +35,6 @@ public class IdDispenser {
     }
 
     public Set<Integer> getUsedIDs() {
-        return usedIDs;
+        return Set.copyOf(usedIDs);
     }
 }

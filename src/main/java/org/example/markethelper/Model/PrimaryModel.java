@@ -163,51 +163,81 @@ public class PrimaryModel implements IModel {
         ArrayList<Item> filtered = new ArrayList<>();
         filtered = getAllItems();
         for (int i = filtered.size() - 1; i >= 0; i--) {
+
+            boolean done = false;
+
             if (minB) {
-                if (filtered.get(i).getPrice() <= minI) {
-                    filtered.remove(i);
+                if(!done) {
+                    if (filtered.get(i).getPrice() <= minI) {
+                        filtered.remove(i);
+                        done = true;
+                    }
                 }
             }
             if (maxB) {
-                if (filtered.get(i).getPrice() >= maxI) {
-                    filtered.remove(i);
+                if(!done) {
+                    if (filtered.get(i).getPrice() >= maxI) {
+                        filtered.remove(i);
+                        done = true;
+                    }
                 }
             }
             if (averageMinB) {
-                if (filtered.get(i).getPrice() <= averageMinI) {
-                    filtered.remove(i);
+                if(!done) {
+                    if (filtered.get(i).getPrice() <= averageMinI) {
+                        filtered.remove(i);
+                        done = true;
+                    }
                 }
             }
             if (averageMaxB) {
-                if (filtered.get(i).getPrice() >= averageMaxI) {
-                    filtered.remove(i);
+                if(!done) {
+                    if (filtered.get(i).getPrice() >= averageMaxI) {
+                        filtered.remove(i);
+                        done = true;
+                    }
                 }
             }
             if (itemB) {
-                if (getItemType(filtered.get(i)).equals("Item")) {
-                    filtered.remove(i);
+                if(!done) {
+                    if (getItemType(filtered.get(i)).equals("Item")) {
+                        filtered.remove(i);
+                        done = true;
+                    }
                 }
             }
             if (modB) {
-                if (getItemType(filtered.get(i)).equals("Mod")) {
-                    filtered.remove(i);
+                if(!done) {
+                    if (getItemType(filtered.get(i)).equals("Mod")) {
+                        filtered.remove(i);
+                        done = true;
+                    }
                 }
             }
             if (rivenB) {
-                if (getItemType(filtered.get(i)).equals("Riven")) {
-                    filtered.remove(i);
+                if(!done) {
+                    if (getItemType(filtered.get(i)).equals("Riven")) {
+                        filtered.remove(i);
+                        done = true;
+                    }
                 }
             }
             if (primeB) {
-                if (getItemType(filtered.get(i)).equals("PrimePart")) {
-                    filtered.remove(i);
+                if(!done) {
+                    if (getItemType(filtered.get(i)).equals("PrimePart")) {
+                        filtered.remove(i);
+                        done = true;
+                    }
                 }
             }
             if (rarityB) {
-                if (getItemType(filtered.get(i)).equals("PrimePart")) {
-                    PrimePart prime = (PrimePart) filtered.get(i);
-                    if (prime.getRarity() != rarityI) {
-                        filtered.remove(i);
+                if(!done) {
+                    if (getItemType(filtered.get(i)).equals("PrimePart")) {
+                        PrimePart prime = (PrimePart) filtered.get(i);
+                        if (prime.getRarity() != rarityI) {
+                            filtered.remove(i);
+                            done = true;
+                        }
                     }
                 }
             }

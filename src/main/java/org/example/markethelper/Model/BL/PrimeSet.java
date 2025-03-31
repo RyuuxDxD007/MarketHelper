@@ -53,7 +53,7 @@ public class PrimeSet {
         set[3] = String.valueOf(getSetPrice());
         for (int i = 0; i < 6; i++) {
             PrimePart part = getPrimePart(i);
-            set[4 + i] = (part != null) ? String.valueOf(part.getId()) : "null";
+            set[4 + i] = (part != null) ? String.valueOf(part.getId()) : null;
         }
         return set;
     }

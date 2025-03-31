@@ -115,7 +115,7 @@ public class MainPage implements PropertyChangeListener, IView{
         CheckBox check10 = new CheckBox("Rarity");
         check10.setOnAction(controller.generateEventHandlerAction("select-rarity",supplier));
         ComboBox<String> rarityCombo = new ComboBox<>();
-        rarityCombo.setItems(FXCollections.observableArrayList("10", "25", "45", "65", "100"));
+        rarityCombo.setItems(FXCollections.observableArrayList("15", "25", "45", "65", "100"));
         rarityCombo.valueProperty().addListener((observable, oldValue, newValue) -> {controller.rarityFieldChange(newValue);});
         filtringBox2.getChildren().addAll(check6, check7, check8, check9, check10, rarityCombo);
 
