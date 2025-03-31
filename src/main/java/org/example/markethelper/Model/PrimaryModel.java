@@ -30,6 +30,9 @@ public class PrimaryModel implements IModel {
     private IPrimePartDAO primePartDAO;
     private IPrimeSetDAO primeSetDAO;
     private IUserDAO userDAO;
+    static final public int ERROR_CODE = -1;
+    private ArrayList<Integer> usedIDs = new ArrayList<>();
+    private IdDispenser idDispenser;
 
     //boolean for filtering
     boolean minB = false;
@@ -42,16 +45,12 @@ public class PrimaryModel implements IModel {
     boolean primeB = false;
     boolean rarityB = false;
 
+    //data from the fields
     private int minI;
     private int maxI;
     private int averageMinI;
     private int averageMaxI;
     private int rarityI;
-
-    final private int ERROR_CODE = -1;
-    ArrayList<Integer> usedIDs = new ArrayList<>();
-    IdDispenser idDispenser;
-
 
     public PrimaryModel() {
         support = new PropertyChangeSupport(this);
@@ -545,25 +544,25 @@ public class PrimaryModel implements IModel {
 
     public ArrayList<Relic> relicFiltring() {
         ArrayList<Relic> filtered = new ArrayList<>();
-        filtered = getAllRelics(); // Replace with the method to fetch all relics
+        filtered = getAllRelics();
         for (int i = filtered.size() - 1; i >= 0; i--) {
             if (minB) {
-                if (filtered.get(i).getRelicPrice() <= minI) { // Adjusted method name to match Relic
+                if (filtered.get(i).getRelicPrice() <= minI) {
                     filtered.remove(i);
                 }
             }
             if (maxB) {
-                if (filtered.get(i).getRelicPrice() >= maxI) { // Adjusted method name to match Relic
+                if (filtered.get(i).getRelicPrice() >= maxI) {
                     filtered.remove(i);
                 }
             }
             if (averageMinB) {
-                if (filtered.get(i).getRelicPrice() <= averageMinI) { // Adjusted method name to match Relic
+                if (filtered.get(i).getRelicPrice() <= averageMinI) {
                     filtered.remove(i);
                 }
             }
             if (averageMaxB) {
-                if (filtered.get(i).getRelicPrice() >= averageMaxI) { // Adjusted method name to match Relic
+                if (filtered.get(i).getRelicPrice() >= averageMaxI) {
                     filtered.remove(i);
                 }
             }

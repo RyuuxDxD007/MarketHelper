@@ -2,11 +2,7 @@ package markethelper.Model;
 
 import org.example.markethelper.Model.IdDispenser;
 import org.junit.jupiter.api.*;
-import org.mockito.Mockito;
-
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class TestIdDispenser {
