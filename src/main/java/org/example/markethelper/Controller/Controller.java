@@ -274,6 +274,9 @@ public class Controller {
                 break;
 
             //view changes
+            case "start":
+                t = (x) -> changeView(action);
+                break;
             case "view-newItem":
                 t = (x) -> changeView(action);
                 break;

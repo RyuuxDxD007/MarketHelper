@@ -1,6 +1,8 @@
 package org.example.markethelper.View;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -96,11 +98,16 @@ public class NewUser implements IView{
 
         //the enter button
         Supplier<String[]> supplier = () -> new String[] {idField.getText(), passField.getText()};
-        HBox buttonEnter = new HBox(40);
+        HBox buttonEnter = new HBox(10);
         buttonEnter.setAlignment(Pos.CENTER);
         Button enter = new Button("Enter");
         enter.setOnAction(controller.generateEventHandlerAction("create-user",supplier));
-        buttonEnter.getChildren().add(enter);
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setOnAction(e -> {
+            EventHandler<ActionEvent> handler = controller.generateEventHandlerAction("start", supplier);
+            handler.handle(new ActionEvent());
+        });
+        buttonEnter.getChildren().addAll(enter, cancelButton);
 
         actualParent.getChildren().addAll(titleBox, idBox, passBox, buttonEnter);
 

@@ -62,6 +62,7 @@ public class Identification implements IView{
         TextField idField = new TextField();
         Button submitIdButton = new Button("Confirm");
 
+
         idBox.getChildren().addAll(idLabel, idField, submitIdButton);
 
         HBox passBox = new HBox(20);
@@ -103,7 +104,16 @@ public class Identification implements IView{
             passBox.setVisible(false);
             idBox.setVisible(true);
         });
-        actualParent.getChildren().addAll(idBox, passBox);
+        HBox cancelBox = new HBox(20);
+        cancelBox.setAlignment(Pos.CENTER);
+        Button cancelButton = new Button("Cancel");
+        Supplier<String[]> cancelSupplier = () -> new String[]{""};
+        cancelButton.setOnAction(e -> {
+            EventHandler<ActionEvent> handler = controller.generateEventHandlerAction("start", cancelSupplier);
+            handler.handle(new ActionEvent());
+        });
+        cancelBox.getChildren().add(cancelButton);
+        actualParent.getChildren().addAll(idBox, passBox, cancelBox);
 
 
         scene = new Scene(actualParent,1300,600);
