@@ -16,7 +16,7 @@ import org.example.markethelper.Model.BL.PrimePart;
 
 import java.util.function.Supplier;
 
-public class VNewSet implements IView{
+public class VNewSet implements IView {
 
 
     private IView view;
@@ -42,6 +42,7 @@ public class VNewSet implements IView{
         this.stage = view.getStage();
         this.prefilledData = null;
     }
+
     public VNewSet(IView view, String[] prefilledData) {
         this.view = view;
         this.controller = view.getController();
@@ -63,6 +64,7 @@ public class VNewSet implements IView{
     public Stage getStage() {
         return stage;
     }
+
     //Shouldn't be usable
     @Override
     public void launchApp() {
@@ -73,10 +75,11 @@ public class VNewSet implements IView{
     public void stopApp() {
         Platform.exit();
     }
+
     @Override
     public void showPrincipalWindow() {
         actualParent = new VBox(50);
-        actualParent.setPadding(new Insets(50,50,50,50));
+        actualParent.setPadding(new Insets(50, 50, 50, 50));
 
         HBox titleBox = new HBox(50);
         Label titleLabel = new Label("New Set info");
@@ -118,7 +121,7 @@ public class VNewSet implements IView{
                 setText(empty ? null : item.getName());
             }
         });
-        if(prefilledData != null && prefilledData[PART1] != null) {
+        if (prefilledData != null && prefilledData[PART1] != null) {
             primePartsBox1.getSelectionModel().select(controller.getPrimePart(prefilledData[PART1]));
         }
         Label primePartsLabel2 = new Label("Prime Part 2 : ");
@@ -138,7 +141,7 @@ public class VNewSet implements IView{
                 setText(empty ? null : item.getName());
             }
         });
-        if(prefilledData != null && prefilledData[PART2] != null) {
+        if (prefilledData != null && prefilledData[PART2] != null) {
             primePartsBox2.getSelectionModel().select(controller.getPrimePart(prefilledData[PART2]));
         }
         Label primePartsLabel3 = new Label("Prime Part 3 : ");
@@ -158,7 +161,7 @@ public class VNewSet implements IView{
                 setText(empty ? null : item.getName());
             }
         });
-        if(prefilledData != null && prefilledData[PART3] != null) {
+        if (prefilledData != null && prefilledData[PART3] != null) {
             primePartsBox3.getSelectionModel().select(controller.getPrimePart(prefilledData[PART3]));
         }
         Label primePartsLabel4 = new Label("Prime Part 4 : ");
@@ -178,7 +181,7 @@ public class VNewSet implements IView{
                 setText(empty ? null : item.getName());
             }
         });
-        if(prefilledData != null && prefilledData[PART4] != null) {
+        if (prefilledData != null && prefilledData[PART4] != null) {
             primePartsBox4.getSelectionModel().select(controller.getPrimePart(prefilledData[PART4]));
         }
         Label primePartsLabel5 = new Label("Prime Part 5 : ");
@@ -198,7 +201,7 @@ public class VNewSet implements IView{
                 setText(empty ? null : item.getName());
             }
         });
-        if(prefilledData != null && prefilledData[PART5] != null) {
+        if (prefilledData != null && prefilledData[PART5] != null) {
             primePartsBox5.getSelectionModel().select(controller.getPrimePart(prefilledData[PART5]));
         }
         Label primePartsLabel6 = new Label("Prime Part 6 : ");
@@ -218,7 +221,7 @@ public class VNewSet implements IView{
                 setText(empty ? null : item.getName());
             }
         });
-        if(prefilledData != null && prefilledData[PART6] != null) {
+        if (prefilledData != null && prefilledData[PART6] != null) {
             primePartsBox6.getSelectionModel().select(controller.getPrimePart(prefilledData[PART6]));
         }
         primePartsBox.getChildren().addAll(primePartsLabel1, primePartsBox1, primePartsLabel2, primePartsBox2, primePartsLabel3
@@ -239,9 +242,8 @@ public class VNewSet implements IView{
             PrimePart part5 = primePartsBox5.getValue();
             PrimePart part6 = primePartsBox6.getValue();
             if (part1 == null && part2 == null && part3 == null && part4 == null && part5 == null && part6 == null) {
-                showErrorMessage("All ComboBoxes must have a selected Prime Part.");
-            }
-            else if ((part1 != null && part2 != null && part1.getId() == part2.getId()) ||
+                showErrorMessage("One ComboBox must have a selected Prime Part.");
+            } else if ((part1 != null && part2 != null && part1.getId() == part2.getId()) ||
                     (part1 != null && part3 != null && part1.getId() == part3.getId()) ||
                     (part1 != null && part4 != null && part1.getId() == part4.getId()) ||
                     (part1 != null && part5 != null && part1.getId() == part5.getId()) ||
@@ -257,8 +259,7 @@ public class VNewSet implements IView{
                     (part4 != null && part6 != null && part4.getId() == part6.getId()) ||
                     (part5 != null && part6 != null && part5.getId() == part6.getId())) {
                 showErrorMessage("Duplicate Prime Parts are not allowed.");
-            }
-            else if (prefilledData != null){
+            }  else if (prefilledData != null) {
                 Supplier<String[]> supplierItem = () -> new String[]{
                         prefilledData[ID],
                         nameField.getText(),
@@ -272,8 +273,7 @@ public class VNewSet implements IView{
                 };
                 EventHandler<ActionEvent> handler = controller.generateEventHandlerAction("update-set", supplierItem);
                 handler.handle(new ActionEvent());
-            }
-            else {
+            } else {
                 Supplier<String[]> supplierItem = () -> new String[]{
                         nameField.getText(),
                         priceField.getText(),
@@ -296,12 +296,13 @@ public class VNewSet implements IView{
             handler.handle(new ActionEvent());
         });
 
-        buttonBox.getChildren().addAll(confirmButton,cancelButton);
+        buttonBox.getChildren().addAll(confirmButton, cancelButton);
 
         actualParent.getChildren().add(buttonBox);
-        scene = new Scene(actualParent,1300,600);
+        scene = new Scene(actualParent, 1300, 600);
         stage.setScene(scene);
     }
+
     private void showErrorMessage(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Validation Error");

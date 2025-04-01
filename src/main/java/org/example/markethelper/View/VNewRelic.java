@@ -235,27 +235,45 @@ public class VNewRelic implements IView{
             PrimePart part4 = primePartsBox4.getValue();
             PrimePart part5 = primePartsBox5.getValue();
             PrimePart part6 = primePartsBox6.getValue();
-            if (part1 == null && part2 == null && part3 == null && part4 == null && part5 == null && part6 == null) {
+            if (part1 == null || part2 == null || part3 == null || part4 == null || part5 == null || part6 == null) {
                 showErrorMessage("All ComboBoxes must have a selected Prime Part.");
             }
-            else if ((part1 != null && part2 != null && part1.getId() == part2.getId()) ||
-                    (part1 != null && part3 != null && part1.getId() == part3.getId()) ||
-                    (part1 != null && part4 != null && part1.getId() == part4.getId()) ||
-                    (part1 != null && part5 != null && part1.getId() == part5.getId()) ||
-                    (part1 != null && part6 != null && part1.getId() == part6.getId()) ||
-                    (part2 != null && part3 != null && part2.getId() == part3.getId()) ||
-                    (part2 != null && part4 != null && part2.getId() == part4.getId()) ||
-                    (part2 != null && part5 != null && part2.getId() == part5.getId()) ||
-                    (part2 != null && part6 != null && part2.getId() == part6.getId()) ||
-                    (part3 != null && part4 != null && part3.getId() == part4.getId()) ||
-                    (part3 != null && part5 != null && part3.getId() == part5.getId()) ||
-                    (part3 != null && part6 != null && part3.getId() == part6.getId()) ||
-                    (part4 != null && part5 != null && part4.getId() == part5.getId()) ||
-                    (part4 != null && part6 != null && part4.getId() == part6.getId()) ||
-                    (part5 != null && part6 != null && part5.getId() == part6.getId())) {
+            else if ((part1.getId() == part2.getId()) ||
+                    (part1.getId() == part3.getId()) ||
+                    (part1.getId() == part4.getId()) ||
+                    (part1.getId() == part5.getId()) ||
+                    (part1.getId() == part6.getId()) ||
+                    (part2.getId() == part3.getId()) ||
+                    (part2.getId() == part4.getId()) ||
+                    (part2.getId() == part5.getId()) ||
+                    (part2.getId() == part6.getId()) ||
+                    (part3.getId() == part4.getId()) ||
+                    (part3.getId() == part5.getId()) ||
+                    (part3.getId() == part6.getId()) ||
+                    (part4.getId() == part5.getId()) ||
+                    (part4.getId() == part6.getId()) ||
+                    (part5.getId() == part6.getId())) {
                 showErrorMessage("Duplicate Prime Parts are not allowed.");
-            }
-            else if (prefilledData != null){
+            } else if ((part1.getColor().equals("Bronze") ? 1 : 0) +
+                    (part2.getColor().equals("Bronze") ? 1 : 0) +
+                    (part3.getColor().equals("Bronze") ? 1 : 0) +
+                    (part4.getColor().equals("Bronze") ? 1 : 0) +
+                    (part5.getColor().equals("Bronze") ? 1 : 0) +
+                    (part6.getColor().equals("Bronze") ? 1 : 0) != 3 ||
+                    (part1.getColor().equals("Silver") ? 1 : 0) +
+                            (part2.getColor().equals("Silver") ? 1 : 0) +
+                            (part3.getColor().equals("Silver") ? 1 : 0) +
+                            (part4.getColor().equals("Silver") ? 1 : 0) +
+                            (part5.getColor().equals("Silver") ? 1 : 0) +
+                            (part6.getColor().equals("Silver") ? 1 : 0) != 2 ||
+                    (part1.getColor().equals("Gold") ? 1 : 0) +
+                            (part2.getColor().equals("Gold") ? 1 : 0) +
+                            (part3.getColor().equals("Gold") ? 1 : 0) +
+                            (part4.getColor().equals("Gold") ? 1 : 0) +
+                            (part5.getColor().equals("Gold") ? 1 : 0) +
+                            (part6.getColor().equals("Gold") ? 1 : 0) != 1) {
+                showErrorMessage("PrimeParts are not 3 Bronze, 2 Silver and 1 Gold !");
+            } else if (prefilledData != null){
                 Supplier<String[]> supplierItem = () -> new String[]{
                         prefilledData[ID],
                         nameField.getText(),

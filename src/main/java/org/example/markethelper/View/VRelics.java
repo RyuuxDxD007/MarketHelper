@@ -25,7 +25,7 @@ public class VRelics implements IView, PropertyChangeListener {
     private static Stage stage;
     private VBox actualParent;
     private Controller controller;
-    TableView<Relic> setTable;
+    TableView<Relic> relicTable;
 
     public VRelics(IView view) {
         this.view = view;
@@ -99,7 +99,7 @@ public class VRelics implements IView, PropertyChangeListener {
 
 
 
-        setTable = new TableView<>();
+        relicTable = new TableView<>();
 
         TableColumn<Relic, String> setNameCol = new TableColumn<>("Relic Name");
         setNameCol.setCellValueFactory(new PropertyValueFactory<>("relicName"));
@@ -133,7 +133,7 @@ public class VRelics implements IView, PropertyChangeListener {
         TableColumn<Relic, String> part6Col = new TableColumn<>("Part 6");
         part6Col.setCellValueFactory(cellData ->
                 new SimpleStringProperty(controller.getPrimePartNameRelic(cellData.getValue(), 5)));
-        setTable.getColumns().addAll(setNameCol, setPriceCol, separatedPriceCol, part1Col, part2Col, part3Col, part4Col, part5Col, part6Col);
+        relicTable.getColumns().addAll(setNameCol, setPriceCol, separatedPriceCol, part1Col, part2Col, part3Col, part4Col, part5Col, part6Col);
 
         HBox buttonBox = new HBox(30);
         buttonBox.setAlignment(Pos.BOTTOM_CENTER);
@@ -141,7 +141,7 @@ public class VRelics implements IView, PropertyChangeListener {
         newSet.setOnAction(controller.generateEventHandlerAction("view-newRelic",supplier));
         Button modifySet = new Button("Modify");
         modifySet.setOnAction(event -> {
-            Relic select = setTable.getSelectionModel().getSelectedItem();
+            Relic select = relicTable.getSelectionModel().getSelectedItem();
             if (select != null) {
                 Supplier<String[]> supplierModify = select::toStringArray;
                 controller.generateEventHandlerAction("modify-relic", supplierModify).handle(event);
@@ -151,7 +151,7 @@ public class VRelics implements IView, PropertyChangeListener {
         });
         Button deleteSet = new Button("Delete");
         deleteSet.setOnAction(event -> {
-            Relic select = setTable.getSelectionModel().getSelectedItem();
+            Relic select = relicTable.getSelectionModel().getSelectedItem();
             if (select != null) {
                 Supplier<String[]> supplierDelete = () -> new String[]{String.valueOf(select.getRelicId())};
                 controller.generateEventHandlerAction("delete-relic",supplierDelete).handle(event);
@@ -165,7 +165,7 @@ public class VRelics implements IView, PropertyChangeListener {
         Items.setOnAction(controller.generateEventHandlerAction("view-mainPage",supplier));
         buttonBox.getChildren().addAll(newSet, modifySet, deleteSet, relics, Items);
 
-        actualParent.getChildren().addAll(filtringBox1, setTable, buttonBox);
+        actualParent.getChildren().addAll(filtringBox1, relicTable, buttonBox);
         controller.showAllRelics();
 
         scene = new Scene(actualParent,1300,600);
@@ -173,8 +173,8 @@ public class VRelics implements IView, PropertyChangeListener {
 
     }
     public void showAllRelics(ArrayList<Relic> listSets) {
-        if (setTable != null) {
-            setTable.getItems().setAll(listSets);
+        if (relicTable != null) {
+            relicTable.getItems().setAll(listSets);
         }
     }
 
